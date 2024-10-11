@@ -2,8 +2,10 @@ package ar.edu.utn.dds.k3003.controller;
 
 import ar.edu.utn.dds.k3003.app.Fachada;
 import ar.edu.utn.dds.k3003.facades.dtos.EstadoTrasladoEnum;
+import ar.edu.utn.dds.k3003.facades.dtos.RutaDTO;
 import ar.edu.utn.dds.k3003.facades.dtos.TrasladoDTO;
 import ar.edu.utn.dds.k3003.facades.exceptions.TrasladoNoAsignableException;
+import ar.edu.utn.dds.k3003.model.dtos.IncidenteDTO;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 
@@ -19,6 +21,26 @@ public class IncidenteController {
         this.fachada = fachada;
     }
 
+    public void agregar(Context context) {
+        var incidenteDTO = context.bodyAsClass(IncidenteDTO.class);
+        var incidenteDTORta = this.fachada.crearIncidente(incidenteDTO);
+        context.json(incidenteDTORta);
+        context.status(HttpStatus.CREATED);
+    }
+
+    public void obtener(Context context) throws NoSuchElementException {
+        var id = context.pathParamAsClass("id", Long.class).get();
+        try {
+            var incidenteDTO = this.fachada.buscarIncidente(id);
+            context.json(incidenteDTO);
+        } catch (NoSuchElementException ex) {
+            throw new NoSuchElementException(ex.getLocalizedMessage());
+        }
+    }
+
+
+    // Metodos deprecados -------------------------------
+
     public void asignar(Context context) throws TrasladoNoAsignableException, NoSuchElementException {
         try {
             var trasladoDTO = context.bodyAsClass(TrasladoDTO.class);
@@ -33,16 +55,6 @@ public class IncidenteController {
             } else {
                 throw new NoSuchElementException(e.getLocalizedMessage());
             }
-        }
-    }
-
-    public void obtener(Context context) throws NoSuchElementException {
-        var id = context.pathParamAsClass("id", Long.class).get();
-        try {
-            var trasladoDTO = this.fachada.buscarXId(id);
-            context.json(trasladoDTO);
-        } catch (NoSuchElementException ex) {
-            throw new NoSuchElementException(ex.getLocalizedMessage());
         }
     }
 
@@ -89,10 +101,9 @@ public class IncidenteController {
 
     public void eliminar(Context ctx) {
         try {
-            fachada.trasladoRepository.borrarTodo();
-            // Agrego un body en json diciendo que se eliminaron todas las rutas
-            ctx.json(Collections.singletonMap("message", "Se eliminaron todos los traslados"));
-            ctx.status(HttpStatus.NO_CONTENT);
+            fachada.incidenteRepository.borrarTodo();
+            ctx.json(Collections.singletonMap("message", "Se eliminaron todos los incidentes"));
+            ctx.status(HttpStatus.ACCEPTED);
         } catch (Exception e) {
             throw new RuntimeException(e.getLocalizedMessage());
         }

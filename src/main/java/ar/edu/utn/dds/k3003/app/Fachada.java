@@ -6,12 +6,12 @@ import ar.edu.utn.dds.k3003.facades.FachadaLogistica;
 import ar.edu.utn.dds.k3003.facades.FachadaViandas;
 import ar.edu.utn.dds.k3003.facades.dtos.*;
 import ar.edu.utn.dds.k3003.facades.exceptions.TrasladoNoAsignableException;
+import ar.edu.utn.dds.k3003.model.Incidente;
 import ar.edu.utn.dds.k3003.model.Ruta;
 import ar.edu.utn.dds.k3003.model.Traslado;
-import ar.edu.utn.dds.k3003.repositories.RutaMapper;
-import ar.edu.utn.dds.k3003.repositories.RutaRepository;
-import ar.edu.utn.dds.k3003.repositories.TrasladoMapper;
-import ar.edu.utn.dds.k3003.repositories.TrasladoRepository;
+import ar.edu.utn.dds.k3003.model.dtos.IncidenteDTO;
+import ar.edu.utn.dds.k3003.model.enums.EstadoIncidenteEnum;
+import ar.edu.utn.dds.k3003.repositories.*;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.prometheusmetrics.PrometheusMeterRegistry;
 import ar.edu.utn.dds.k3003.clients.ViandasRetrofitClient;
@@ -42,6 +42,10 @@ public class Fachada implements FachadaLogistica {
     private final RutaMapper rutaMapper;
     public final TrasladoRepository trasladoRepository;
     private final TrasladoMapper trasladoMapper;
+
+    public IncidenteRepository incidenteRepository;
+    public IncidenteMapper incidenteMapper;
+
     private FachadaViandas fachadaViandas;
     private FachadaHeladeras fachadaHeladeras;
 
@@ -53,11 +57,59 @@ public class Fachada implements FachadaLogistica {
     public Fachada() {
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("postgres");
         EntityManager entityManager = entityManagerFactory.createEntityManager();
+
         this.rutaRepository = new RutaRepository(entityManager);
         this.trasladoRepository = new TrasladoRepository(entityManager);
         this.rutaMapper = new RutaMapper();
         this.trasladoMapper = new TrasladoMapper();
+
+        this.incidenteRepository = new IncidenteRepository(entityManager);
+        this.incidenteMapper = new IncidenteMapper();
     }
+
+    public IncidenteDTO crearIncidente(IncidenteDTO incidenteDTO) throws IllegalArgumentException {
+
+        if(incidenteDTO.getHeladeraId() == null){
+            throw new IllegalArgumentException("El id de la heladera no puede ser nulo");
+        }
+
+        if(incidenteDTO.getTipoIncidente() == null){
+            throw new IllegalArgumentException("El tipo de incidente no puede ser nulo");
+        }
+
+        // Creo un nuevo incidente con los datos recibidos
+        Incidente incidente = new Incidente(
+                EstadoIncidenteEnum.ACTIVO,
+                incidenteDTO.getTipoIncidente(),
+                incidenteDTO.getHeladeraId(),
+                incidenteDTO.isExcedeTemperatura(),
+                incidenteDTO.getExcesoTemperatura(),
+                incidenteDTO.getTiempoSinRespuesta()
+        );
+
+        // TODO: Descomentar cuando se implemente la funcionalidad en Heladeras que modifica el estado de una heladera
+        // this.fachadaHeladeras.modificarEstadoHeladera(incidenteDTO.getHeladeraId(), EstadoHeladeraEnum.INACTIVA);
+
+        // Guardo el incidente en la base de datos
+        Incidente incidenteGuardado = this.incidenteRepository.save(incidente);
+
+        // Devuelvo un DTO con la información del incidente guardado
+        return incidenteMapper.map(incidenteGuardado);
+    }
+
+    public IncidenteDTO buscarIncidente(Long idIncidente) throws NoSuchElementException {
+        Incidente incidente = this.incidenteRepository.findById(idIncidente);
+        IncidenteDTO incidenteDTO= new IncidenteDTO(incidente.getTipoIncidente(), incidente.getHeladeraId(), incidente.getEstadoIncidente(), incidente.isExcedeTemperatura(), incidente.getExcesoTemperatura(), incidente.getTiempoSinRespuesta());
+        incidenteDTO.setId(incidente.getId());
+        return incidenteDTO;
+    }
+
+
+
+
+
+
+    // Metodos deprecados ------------------------------------
 
     /*
     * "Un colaborador de transporte establece que puede llevar

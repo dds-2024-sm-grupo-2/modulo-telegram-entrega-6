@@ -28,6 +28,8 @@ public class Incidente {
     @Column(name = "tipoIncidente")
     private TipoIncidenteEnum tipoIncidente;
 
+    @Getter
+    @Setter
     @Column(name = "excedeTemperatura")
     private boolean excedeTemperatura;
 

@@ -8,30 +8,52 @@ https://modulo-incidentes-entrega-5.onrender.com
 ```
 Se implementan los siguientes endpoints:
 
-- POST /incidentes
+- POST /incidentes 
     - Request body: JSON con los datos del incidente a crear.
-  ```
-  {
-    "heladeraId": 1,
-    "tipo": "alerta_temperatura", // o "alerta_fraude", "alerta_falla_conexion", "falla_tecnica"
-    "excede": true, // solo para alerta de temperatura
-    "unidades": N,  // solo para alerta de temperatura
-    "tiempoSinRespuesta": N, // solo para alerta de falla de conexión
-  }
-  ```
-    - Response body: JSON con los datos del incidente creado.
-  ```
-  {
-    "id": 1,
-    "estado": "activo", // o "resuelto", cuando se resuelve el incidente
-    "heladeraId": 1,
-    "tipo": "alerta_temperatura",
-    "excede": true,
-    "unidades": 5,
-    "tiempoSinRespuesta": null,
-    "fecha": "2024-10-11T12:00:00"
-  }
-  ```
+      -  ALERTA_FRAUDE
+        ```
+        {
+          "heladeraId": 1,
+          "tipoIncidente": "ALERTA_FRAUDE"
+        }
+        ```
+      -  ALERTA_TEMPERATURA
+        ```
+        {
+          "heladeraId": 1,
+          "tipoIncidente": "ALERTA_TEMPERATURA",
+          "excedeTemperatura": true,
+          "excesoTemperatura": 5
+        }
+        ```
+      - ALERTA_FALLA_CONEXION
+      ```
+      {
+        "heladeraId": 1,
+        "tipoIncidente": "ALERTA_FALLA_CONEXION",
+        "tiempoSinRespuesta": 1
+      }
+      ```
+      - FALLA_TECNICA
+      ```
+      {
+          "heladeraId": 1,
+          "tipoIncidente": "FALLA_TECNICA"
+      }
+      ```
+  - Response body: JSON con los datos del incidente creado.
+    ```
+    {
+     "id": 1,
+     "estado": "activo", // o "resuelto", cuando se resuelve el incidente
+     "heladeraId": 1,
+     "tipo": "alerta_temperatura",
+     "excede": true,
+     "unidades": 5,
+     "tiempoSinRespuesta": null,
+     "fecha": "2024-10-11T12:00:00"
+    }
+    ```
 - GET /incidentes/{id}
     - Response body: JSON con los datos del incidente solicitado.
   ```
@@ -48,31 +70,11 @@ Se implementan los siguientes endpoints:
   ```
 - DELETE /incidentes
     - Response body: JSON con los datos de los incidentes eliminados.
-  ```
-  [
+    ```
     {
-      "id": 1,
-      "estado": "resuelto",
-      "heladeraId": 1,
-      "tipo": "alerta_temperatura",
-      "excede": true,
-      "unidades": 5,
-      "tiempoSinRespuesta": null,
-      "fecha": "2024-10-11T12:00:00"
-    },
-    {
-      "id": 2,
-      "estado": "resuelto",
-      "heladeraId": 2,
-      "tipo": "alerta_fraude",
-      "excede": null,
-      "unidades": null,
-      "tiempoSinRespuesta": null,
-      "fecha": "2024-10-11T12:00:00"
-    },
-    ...
-  ]
-  ```
+      message": "Se eliminaron todos los incidentes"
+    }
+    ```
 - GET /metrics
     - Response body: JSON con las métricas de los incidentes.
     ```

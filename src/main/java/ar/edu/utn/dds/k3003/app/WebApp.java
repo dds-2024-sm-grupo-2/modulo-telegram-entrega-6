@@ -77,7 +77,7 @@ public class WebApp {
         */
 
         // Maquetacion de los endpoints de incidentes
-        app.post("/incidentes", incidentesController::asignar);
+        app.post("/incidentes", incidentesController::agregar);
         app.get("/incidentes/{id}", incidentesController::obtener);
 
         // Endpoint para eliminar todos los incidentes
