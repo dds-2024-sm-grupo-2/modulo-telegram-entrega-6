@@ -45,9 +45,9 @@ Se implementan los siguientes endpoints:
     ```
     {
      "id": 1,
-     "estado": "activo", // o "resuelto", cuando se resuelve el incidente
+     "estado": "ACTIVO", // o "RESUELTO", cuando se resuelve el incidente
      "heladeraId": 1,
-     "tipo": "alerta_temperatura",
+     "tipo": "ALERTA_TEMPERATURA",
      "excede": true,
      "unidades": 5,
      "tiempoSinRespuesta": null,
@@ -59,9 +59,9 @@ Se implementan los siguientes endpoints:
   ```
   {
     "id": 1,
-    "estado": "activo",
+    "estado": "ACTIVO",
     "heladeraId": 1,
-    "tipo": "alerta_temperatura",
+    "tipo": "ALERTA_TEMPERATURA",
     "excede": true,
     "unidades": 5,
     "tiempoSinRespuesta": null,
@@ -255,11 +255,7 @@ Se implementan los siguientes endpoints:
     # TYPE system_load_average_1m gauge
     system_load_average_1m{app="metrics-sample"} 6.21
     ```
-
-
-
 <hr>
-
 <div id="footer" align="center">
   <a href="https://www.frba.utn.edu.ar/">
   <img src="https://github.com/ddsutn-k3003/2024-tp-entrega-2-kenzogrosvald/assets/94919997/f35d82b8-fd1a-435a-b1d9-3aad2785b732" style="width:70%; height:auto;">
