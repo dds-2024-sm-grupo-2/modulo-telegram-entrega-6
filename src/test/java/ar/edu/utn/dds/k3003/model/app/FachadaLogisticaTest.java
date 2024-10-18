@@ -5,7 +5,6 @@ import ar.edu.utn.dds.k3003.facades.FachadaHeladeras;
 import ar.edu.utn.dds.k3003.facades.FachadaViandas;
 import ar.edu.utn.dds.k3003.facades.dtos.*;
 import ar.edu.utn.dds.k3003.facades.exceptions.TrasladoNoAsignableException;
-import ar.edu.utn.dds.k3003.model.Ruta;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
