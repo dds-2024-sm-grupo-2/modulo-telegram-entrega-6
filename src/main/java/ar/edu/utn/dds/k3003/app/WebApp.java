@@ -3,8 +3,6 @@ package ar.edu.utn.dds.k3003.app;
 import ar.edu.utn.dds.k3003.clients.HeladerasProxy;
 import ar.edu.utn.dds.k3003.clients.ViandasProxy;
 import ar.edu.utn.dds.k3003.controller.IncidenteController;
-import ar.edu.utn.dds.k3003.controller.RutaController;
-import ar.edu.utn.dds.k3003.controller.TrasladoController;
 import ar.edu.utn.dds.k3003.facades.dtos.Constants;
 import ar.edu.utn.dds.k3003.facades.exceptions.TrasladoNoAsignableException;
 import io.javalin.Javalin;
@@ -65,16 +63,6 @@ public class WebApp {
 
         // Home
         app.get("/", ctx -> ctx.result("Modulo Incidentes - Diseño de Sistemas K3003 - UTN FRBA"));
-
-        /* APIs base deprecadas
-        app.post("/rutas", rutaController::agregar);
-        app.delete("/rutas", rutaController::eliminar);
-        app.post("/traslados", trasladosController::asignar);
-        app.get("/traslados/{id}", trasladosController::obtener);
-        app.get("/traslados/search/findByColaboradorId", trasladosController::obtenerPorColaboradorId);
-        app.patch("/traslados/{id}",trasladosController::modificar);
-        app.delete("/traslados", trasladosController::eliminar);
-        */
 
         // Maquetacion de los endpoints de incidentes
         app.post("/incidentes", incidentesController::agregar);
