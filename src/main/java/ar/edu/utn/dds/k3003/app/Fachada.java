@@ -80,7 +80,6 @@ public class Fachada {
         // TODO: Descomentar cuando se implemente la funcionalidad en Heladeras que modifica el estado de una heladera
         // HeladeraDTO heladeraDTO = this.fachadaHeladeras.modificarEstadoHeladera(incidenteDTO.getHeladeraId(), EstadoHeladeraEnum.INACTIVA);
 
-        // TODO: Descomentar cuando se implementa la funcionalidad en Colaboradores que reporta una falla
          this.fachadaColaboradores.reportarFalla(incidenteDTO);
 
         // Guardo el incidente en la base de datos
