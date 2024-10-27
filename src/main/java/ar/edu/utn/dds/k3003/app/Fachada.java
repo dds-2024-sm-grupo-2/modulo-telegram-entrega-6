@@ -1,5 +1,6 @@
 package ar.edu.utn.dds.k3003.app;
 
+import ar.edu.utn.dds.k3003.clients.ColaboradoresProxy;
 import ar.edu.utn.dds.k3003.facades.FachadaColaboradores;
 import ar.edu.utn.dds.k3003.facades.FachadaHeladeras;
 import ar.edu.utn.dds.k3003.facades.FachadaLogistica;
@@ -41,6 +42,8 @@ public class Fachada {
     private FachadaViandas fachadaViandas;
     private FachadaHeladeras fachadaHeladeras;
 
+    private ColaboradoresProxy fachadaColaboradores;
+
     private Counter trasladosAsignadosCounter;
     private Counter rutasCreadasCounter;
     private Counter trasladosRetiradosCounter;
@@ -78,7 +81,7 @@ public class Fachada {
         // HeladeraDTO heladeraDTO = this.fachadaHeladeras.modificarEstadoHeladera(incidenteDTO.getHeladeraId(), EstadoHeladeraEnum.INACTIVA);
 
         // TODO: Descomentar cuando se implementa la funcionalidad en Colaboradores que reporta una falla
-        // this.fachadaColaboradores.reportarFalla(heladeraDTO);
+         this.fachadaColaboradores.reportarFalla(incidenteDTO);
 
         // Guardo el incidente en la base de datos
         Incidente incidenteGuardado = this.incidenteRepository.save(incidente);

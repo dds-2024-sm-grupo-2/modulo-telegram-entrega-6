@@ -5,6 +5,7 @@ import ar.edu.utn.dds.k3003.facades.FachadaHeladeras;
 import ar.edu.utn.dds.k3003.facades.FachadaLogistica;
 import ar.edu.utn.dds.k3003.facades.FachadaViandas;
 import ar.edu.utn.dds.k3003.facades.dtos.*;
+import ar.edu.utn.dds.k3003.model.dtos.IncidenteDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
@@ -29,9 +30,9 @@ public class ColaboradoresProxy implements FachadaColaboradores {
         this.service = retrofit.create(ColaboradoresRetrofitClient.class);
     }
 
-    public void reportarFalla(HeladeraDTO heladeraDTO) {
+    public void reportarFalla(IncidenteDTO incidenteDTO) {
         try {
-            Response<Void> response = service.reportarFalla(heladeraDTO).execute();
+            Response<Void> response = service.reportarFalla(incidenteDTO).execute();
             if (!response.isSuccessful()) {
                 throw new RuntimeException("No se pudo reportar a colaboradores la falla de la heladera: " + response.errorBody().string());
             }
