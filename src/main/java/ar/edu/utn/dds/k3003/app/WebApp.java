@@ -1,5 +1,6 @@
 package ar.edu.utn.dds.k3003.app;
 
+import ar.edu.utn.dds.k3003.clients.ColaboradoresProxy;
 import ar.edu.utn.dds.k3003.clients.HeladerasProxy;
 import ar.edu.utn.dds.k3003.clients.ViandasProxy;
 import ar.edu.utn.dds.k3003.controller.IncidenteController;
@@ -37,6 +38,7 @@ public class WebApp {
 
         fachada.setViandasProxy(new ViandasProxy(objectMapper));
         fachada.setHeladerasProxy(new HeladerasProxy(objectMapper));
+        fachada.setColaboradoresProxy(new ColaboradoresProxy(objectMapper));
         fachada.setRegistry(registry);
 
         var port = Integer.parseInt(env.getOrDefault("PORT", "8080"));

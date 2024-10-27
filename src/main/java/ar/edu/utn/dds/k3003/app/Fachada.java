@@ -105,6 +105,10 @@ public class Fachada {
         this.fachadaViandas = fachadaViandas;
     }
 
+    public void setColaboradoresProxy(ColaboradoresProxy fachadaColaboradores) {
+        this.fachadaColaboradores = fachadaColaboradores;
+    }
+
     public void setRegistry(PrometheusMeterRegistry registry) {
 
         this.trasladosAsignadosCounter = Counter.builder("app.traslados.asignados")
