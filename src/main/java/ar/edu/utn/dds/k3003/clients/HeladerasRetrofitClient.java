@@ -12,8 +12,8 @@ public interface HeladerasRetrofitClient {
     @GET("retiros")
     Call<RetiroDTO> retirar();
 
-    /*
-    @POST("heladeras/{id}/estado")
-    Cal<Void> modificarEstado(@Path("id") Integer id,@Body EstadoHeladeraEnum estado);
-    */
+    @POST("cambiarEstadoActivo/{idHeladera}/")
+    Call<Void> modificarEstadoHeladera(@Path("idHeladera") Integer id);
+
 }
+

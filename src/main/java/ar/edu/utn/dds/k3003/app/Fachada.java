@@ -1,6 +1,7 @@
 package ar.edu.utn.dds.k3003.app;
 
 import ar.edu.utn.dds.k3003.clients.ColaboradoresProxy;
+import ar.edu.utn.dds.k3003.clients.HeladerasProxy;
 import ar.edu.utn.dds.k3003.facades.FachadaColaboradores;
 import ar.edu.utn.dds.k3003.facades.FachadaHeladeras;
 import ar.edu.utn.dds.k3003.facades.FachadaLogistica;
@@ -40,9 +41,10 @@ public class Fachada {
     public IncidenteMapper incidenteMapper;
 
     private FachadaViandas fachadaViandas;
-    private FachadaHeladeras fachadaHeladeras;
 
+    private HeladerasProxy fachadaHeladeras;
     private ColaboradoresProxy fachadaColaboradores;
+
 
     private Counter trasladosAsignadosCounter;
     private Counter rutasCreadasCounter;
@@ -77,8 +79,7 @@ public class Fachada {
                 incidenteDTO.getTiempoSinRespuesta()
         );
 
-        // TODO: Descomentar cuando se implemente la funcionalidad en Heladeras que modifica el estado de una heladera
-        // HeladeraDTO heladeraDTO = this.fachadaHeladeras.modificarEstadoHeladera(incidenteDTO.getHeladeraId(), EstadoHeladeraEnum.INACTIVA);
+         this.fachadaHeladeras.modificarEstadoHeladera(incidenteDTO);
 
          this.fachadaColaboradores.reportarFalla(incidenteDTO);
 
@@ -96,7 +97,7 @@ public class Fachada {
         return incidenteDTO;
     }
 
-    public void setHeladerasProxy(FachadaHeladeras fachadaHeladeras) {
+    public void setHeladerasProxy(HeladerasProxy fachadaHeladeras) {
         this.fachadaHeladeras = fachadaHeladeras;
     }
 

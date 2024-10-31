@@ -3,10 +3,12 @@ package ar.edu.utn.dds.k3003.clients;
 import ar.edu.utn.dds.k3003.facades.FachadaHeladeras;
 import ar.edu.utn.dds.k3003.facades.FachadaViandas;
 import ar.edu.utn.dds.k3003.facades.dtos.*;
+import ar.edu.utn.dds.k3003.model.dtos.IncidenteDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 import lombok.SneakyThrows;
@@ -31,6 +33,18 @@ public class HeladerasProxy implements FachadaHeladeras {
                         .build();
 
         this.service = retrofit.create(HeladerasRetrofitClient.class);
+    }
+
+    public void modificarEstadoHeladera(IncidenteDTO incidenteDTO) {
+        try {
+            Integer id = Integer.parseInt(incidenteDTO.getHeladeraId().toString()); //parsear de long a integer
+            Response<Void> response = service.modificarEstadoHeladera(id).execute();
+            if (!response.isSuccessful()) {
+                throw new RuntimeException("No se pudo cambiar estado de la heladera: " + response.errorBody().string());
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Error al cambiar estado en heladera: ", e);
+        }
     }
 
     @Override
