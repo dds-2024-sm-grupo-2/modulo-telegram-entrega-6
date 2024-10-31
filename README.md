@@ -2,6 +2,11 @@
 
 ## Módulo Incidentes
 
+### Metricas
+```
+https://moduloincidentes.grafana.net/public-dashboards/d8e6299427524a8dbd9a433c7883c861
+```
+
 ### API REST
 ```
 https://modulo-incidentes-entrega-5-busv.onrender.com
