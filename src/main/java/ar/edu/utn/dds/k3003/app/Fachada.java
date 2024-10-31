@@ -79,9 +79,9 @@ public class Fachada {
                 incidenteDTO.getTiempoSinRespuesta()
         );
 
-         this.fachadaHeladeras.modificarEstadoHeladera(incidenteDTO);
+         //this.fachadaHeladeras.modificarEstadoHeladera(incidenteDTO);
 
-         this.fachadaColaboradores.reportarFalla(incidenteDTO);
+         //this.fachadaColaboradores.reportarFalla(incidenteDTO);
 
         // Guardo el incidente en la base de datos
         Incidente incidenteGuardado = this.incidenteRepository.save(incidente);
@@ -123,5 +123,13 @@ public class Fachada {
         this.trasladosDepositadosCounter = Counter.builder("app.traslados.depositados")
                 .description("Numero de traslados depositados")
                 .register(registry);
+    }
+
+    public IncidenteDTO actualizarIncidente(Long idIncidente, EstadoIncidenteEnum estado) throws NoSuchElementException {
+        Incidente incidente = this.incidenteRepository.findById(idIncidente);
+
+        this.incidenteRepository.modificarEstado(idIncidente,estado);
+
+        return incidenteMapper.map(incidente);
     }
 }

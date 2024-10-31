@@ -73,6 +73,21 @@ Se implementan los siguientes endpoints:
     "fecha": "2024-10-11T12:00:00"
   }
   ```
+
+- PATCH /incidentes/{id}
+    - Response body: JSON con los datos del incidente solicitado.
+   ```
+    {
+     "id": 1,
+     "estado": "RESUELTO",
+     "heladeraId": 1,
+     "tipo": "ALERTA_TEMPERATURA",
+     "excede": true,
+     "unidades": 5,
+     "tiempoSinRespuesta": null,
+     "fecha": "2024-10-11T12:00:00"
+    }
+    ```
 - DELETE /incidentes
     - Response body: JSON con los datos de los incidentes eliminados.
     ```

@@ -2,6 +2,7 @@ package ar.edu.utn.dds.k3003.repositories;
 
 import ar.edu.utn.dds.k3003.facades.dtos.EstadoTrasladoEnum;
 import ar.edu.utn.dds.k3003.model.Incidente;
+import ar.edu.utn.dds.k3003.model.enums.EstadoIncidenteEnum;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -39,16 +40,15 @@ public class IncidenteRepository {
         return incidente;
     }
 
-    /*
-    public void modificarEstado(Long idTraslado, EstadoTrasladoEnum estado) {
 
+    public void modificarEstado(Long idIncidente, EstadoIncidenteEnum estado) {
         entityManager.getTransaction().begin();
-        Traslado traslado = this.findById(idTraslado);
-        traslado.setEstado(estado);
-        entityManager.merge(traslado);
+        Incidente incidente = this.findById(idIncidente);
+        incidente.setEstadoIncidente(estado);
+        entityManager.merge(incidente);
         entityManager.getTransaction().commit();
     }
-    */
+
 
     public void borrarTodo() {
         entityManager.getTransaction().begin();

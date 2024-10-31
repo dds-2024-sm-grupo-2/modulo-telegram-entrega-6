@@ -54,11 +54,6 @@ public class WebApp {
 
         final var micrometerPlugin = new MicrometerPlugin(config -> config.registry = registry);
 
-        /* Controllers base deprecados
-        var rutaController = new RutaController(fachada);
-        var trasladosController = new TrasladoController(fachada);
-        */
-
         var incidentesController = new IncidenteController(fachada);
 
         var app = Javalin.create(config -> { config.registerPlugin(micrometerPlugin); }).start(port);
@@ -69,6 +64,7 @@ public class WebApp {
         // Maquetacion de los endpoints de incidentes
         app.post("/incidentes", incidentesController::agregar);
         app.get("/incidentes/{id}", incidentesController::obtener);
+        app.patch("/incidentes/{id}", incidentesController::actualizar);
 
         // Endpoint para eliminar todos los incidentes
         app.delete("/incidentes", incidentesController::eliminar);

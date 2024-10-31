@@ -6,6 +6,7 @@ import ar.edu.utn.dds.k3003.facades.dtos.RutaDTO;
 import ar.edu.utn.dds.k3003.facades.dtos.TrasladoDTO;
 import ar.edu.utn.dds.k3003.facades.exceptions.TrasladoNoAsignableException;
 import ar.edu.utn.dds.k3003.model.dtos.IncidenteDTO;
+import ar.edu.utn.dds.k3003.model.enums.EstadoIncidenteEnum;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 
@@ -45,6 +46,17 @@ public class IncidenteController {
             ctx.status(HttpStatus.ACCEPTED);
         } catch (Exception e) {
             throw new RuntimeException(e.getLocalizedMessage());
+        }
+    }
+
+    public void actualizar(Context context) {
+        var id = context.pathParamAsClass("id", Long.class).get();
+        var incidenteDTO = context.bodyAsClass(IncidenteDTO.class);
+        try {
+            var incidenteDTORta = this.fachada.actualizarIncidente(id, incidenteDTO.getEstadoIncidente());
+            context.json(incidenteDTORta);
+        } catch (NoSuchElementException ex) {
+            throw new NoSuchElementException(ex.getLocalizedMessage());
         }
     }
 }
