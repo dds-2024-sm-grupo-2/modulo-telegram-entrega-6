@@ -12,7 +12,7 @@ public interface HeladerasRetrofitClient {
     @GET("retiros")
     Call<RetiroDTO> retirar();
 
-    @POST("cambiarEstadoActivo/{idHeladera}/")
+    @POST("cambiarEstadoActivo/{idHeladera}")
     Call<Void> modificarEstadoHeladera(@Path("idHeladera") Integer id);
 
 }
