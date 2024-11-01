@@ -45,11 +45,9 @@ public class Fachada {
     private HeladerasProxy fachadaHeladeras;
     private ColaboradoresProxy fachadaColaboradores;
 
-
-    private Counter trasladosAsignadosCounter;
-    private Counter rutasCreadasCounter;
-    private Counter trasladosRetiradosCounter;
-    private Counter trasladosDepositadosCounter;
+    private Counter incidentesCreadosCounter;
+    private Counter incidentesResueltosCounter;
+    private Counter incidentesConsultadosCounter;
 
     public Fachada() {
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("postgres");
@@ -79,12 +77,17 @@ public class Fachada {
                 incidenteDTO.getTiempoSinRespuesta()
         );
 
-         //this.fachadaHeladeras.modificarEstadoHeladera(incidenteDTO);
+         this.fachadaHeladeras.modificarEstadoHeladera(incidenteDTO);
 
-         //this.fachadaColaboradores.reportarFalla(incidenteDTO);
+         this.fachadaColaboradores.reportarFalla(incidenteDTO);
 
         // Guardo el incidente en la base de datos
         Incidente incidenteGuardado = this.incidenteRepository.save(incidente);
+
+        // Incrementar el contador de incidentes creados
+        if (incidentesCreadosCounter != null) {
+            incidentesCreadosCounter.increment();
+        }
 
         // Devuelvo un DTO con la información del incidente guardado
         return incidenteMapper.map(incidenteGuardado);
@@ -94,6 +97,12 @@ public class Fachada {
         Incidente incidente = this.incidenteRepository.findById(idIncidente);
         IncidenteDTO incidenteDTO= new IncidenteDTO(incidente.getTipoIncidente(), incidente.getHeladeraId(), incidente.getEstadoIncidente(), incidente.isExcedeTemperatura(), incidente.getExcesoTemperatura(), incidente.getTiempoSinRespuesta());
         incidenteDTO.setId(incidente.getId());
+
+        // Incrementar el contador de incidentes consultados
+        if (incidentesConsultadosCounter != null) {
+            incidentesConsultadosCounter.increment();
+        }
+
         return incidenteDTO;
     }
 
@@ -111,17 +120,14 @@ public class Fachada {
 
     public void setRegistry(PrometheusMeterRegistry registry) {
 
-        this.trasladosAsignadosCounter = Counter.builder("app.traslados.asignados")
-                .description("Numero de traslados asignados")
+        this.incidentesCreadosCounter = Counter.builder("app.incidentes.creados")
+                .description("Numero de incidentes creados")
                 .register(registry);
-        this.rutasCreadasCounter = Counter.builder("app.rutas.creadas")
-                .description("Numero de rutas creadas")
+        this.incidentesResueltosCounter = Counter.builder("app.incidentes.resueltos")
+                .description("Numero de incidentes resueltos")
                 .register(registry);
-        this.trasladosRetiradosCounter = Counter.builder("app.traslados.retirados")
-                .description("Numero de traslados retirados")
-                .register(registry);
-        this.trasladosDepositadosCounter = Counter.builder("app.traslados.depositados")
-                .description("Numero de traslados depositados")
+        this.incidentesConsultadosCounter = Counter.builder("app.incidentes.consultados")
+                .description("Numero de incidentes consultados")
                 .register(registry);
     }
 
@@ -129,6 +135,11 @@ public class Fachada {
         Incidente incidente = this.incidenteRepository.findById(idIncidente);
 
         this.incidenteRepository.modificarEstado(idIncidente,estado);
+
+        // Si el estado es resuelto, incrementar el contador de incidentes resueltos
+        if (estado == EstadoIncidenteEnum.RESUELTO && incidentesResueltosCounter != null) {
+            incidentesResueltosCounter.increment();
+        }
 
         return incidenteMapper.map(incidente);
     }
