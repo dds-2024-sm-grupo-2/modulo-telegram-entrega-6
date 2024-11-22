@@ -27,9 +27,9 @@ import io.micrometer.prometheusmetrics.PrometheusConfig;
 
 public class WebApp {
 
-    /*
-    public static void main(String[] args) {
 
+    public static void main(String[] args) {
+/*
         final var registry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
         registry.config().commonTags("app", "metrics-sample");
 
@@ -110,6 +110,6 @@ public class WebApp {
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
         objectMapper.setDateFormat(sdf);
         return objectMapper;
-    }*/
+    */}
 
 }
