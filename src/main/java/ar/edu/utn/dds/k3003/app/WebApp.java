@@ -27,6 +27,7 @@ import io.micrometer.prometheusmetrics.PrometheusConfig;
 
 public class WebApp {
 
+    /*
     public static void main(String[] args) {
 
         final var registry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
@@ -59,7 +60,7 @@ public class WebApp {
         var app = Javalin.create(config -> { config.registerPlugin(micrometerPlugin); }).start(port);
 
         // Home
-        app.get("/", ctx -> ctx.result("Modulo Incidentes - Diseño de Sistemas K3003 - UTN FRBA"));
+        app.get("/", ctx -> ctx.result("Modulo Frontend - Diseño de Sistemas K3003 - UTN FRBA"));
 
         // Maquetacion de los endpoints de incidentes
         app.post("/incidentes", incidentesController::agregar);
@@ -109,5 +110,6 @@ public class WebApp {
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
         objectMapper.setDateFormat(sdf);
         return objectMapper;
-    }
+    }*/
+
 }

@@ -30,6 +30,18 @@ public class ColaboradoresProxy implements FachadaColaboradores {
         this.service = retrofit.create(ColaboradoresRetrofitClient.class);
     }
 
+    public ar.edu.utn.dds.k3003.model.dtos.ColaboradorDTO getColab(Long id){
+        try {
+            Response<ar.edu.utn.dds.k3003.model.dtos.ColaboradorDTO> response = service.getColab(id).execute();
+            if (!response.isSuccessful()) {
+                throw new RuntimeException("No se pudo solicitar al colaborador: " + response.errorBody().string());
+            }
+            return response.body();
+        } catch (IOException e) {
+            throw new RuntimeException("Error al solicitar colaborador: ", e);
+        }
+    }
+
     public void reportarFalla(IncidenteDTO incidenteDTO) {
         try {
             Response<Void> response = service.reportarFalla(incidenteDTO).execute();
