@@ -57,7 +57,13 @@ public class WebApp extends TelegramLongPollingBot {
 
                     SendMessage msg = new SendMessage();
                     msg.setChatId(chat_id);
-                    msg.setText("DATOS DEL COLABORADOR: \n" + colaboradorDTO.toString());
+                    msg.setText("DATOS DEL COLABORADOR: \n"
+                            + "ID: " +  colaboradorDTO.getId()
+                            + "\nNOMBRE: " + colaboradorDTO.getNombre()
+                            + "\nPUNTOS: " + colaboradorDTO.getPuntos()
+                            + "\nDINERO_DONADO: " + colaboradorDTO.getDineroDonado()
+                            + "\nHELADERAS_REPARADAS: " + colaboradorDTO.getHeladerasReparadas()
+                            + "\nFORMAS_DE_COLABORAR: " + colaboradorDTO.getFormas().stream().toString());
 
                     try {
                         execute(msg);
