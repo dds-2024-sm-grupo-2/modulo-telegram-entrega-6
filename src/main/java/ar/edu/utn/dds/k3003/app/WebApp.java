@@ -1,12 +1,30 @@
 package ar.edu.utn.dds.k3003.app;
 
 import ar.edu.utn.dds.k3003.clients.ColaboradoresProxy;
+import ar.edu.utn.dds.k3003.clients.HeladerasProxy;
+import ar.edu.utn.dds.k3003.clients.ViandasProxy;
+import ar.edu.utn.dds.k3003.controller.IncidenteController;
 import ar.edu.utn.dds.k3003.facades.dtos.Constants;
+import ar.edu.utn.dds.k3003.facades.exceptions.TrasladoNoAsignableException;
 import ar.edu.utn.dds.k3003.model.dtos.ColaboradorDTO;
+import io.javalin.Javalin;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+import java.util.NoSuchElementException;
+import java.util.TimeZone;
+
+import io.javalin.micrometer.MicrometerPlugin;
+import io.micrometer.core.instrument.binder.jvm.JvmGcMetrics;
+import io.micrometer.core.instrument.binder.jvm.JvmHeapPressureMetrics;
+import io.micrometer.core.instrument.binder.jvm.JvmMemoryMetrics;
+import io.micrometer.core.instrument.binder.system.FileDescriptorMetrics;
+import io.micrometer.core.instrument.binder.system.ProcessorMetrics;
+import io.micrometer.prometheusmetrics.PrometheusMeterRegistry;
+import io.micrometer.prometheusmetrics.PrometheusConfig;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -14,12 +32,11 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-import java.util.TimeZone;
-
 public class WebApp extends TelegramLongPollingBot {
+
     private static ColaboradoresProxy fachadaColaboradores;
+    private static ViandasProxy fachadaViandas;
+    private static HeladerasProxy fachadaHeladeras;
 
     @Override
     public void onUpdateReceived(Update update) {
@@ -32,7 +49,7 @@ public class WebApp extends TelegramLongPollingBot {
 
             switch (mensaje_dividido[0]) {
                 case "/start":
-                    //Hacer logica para que mande un mensaje de bienvenida
+                    //TODO: Hacer logica para que mande un mensaje de bienvenida
                     return;
                 case "/datos":
                     var id_colaborador = Long.parseLong(mensaje_dividido[1]);
@@ -48,9 +65,7 @@ public class WebApp extends TelegramLongPollingBot {
                         throw new RuntimeException(e);
                     }
             }
-
         }
-
     }
     @Override
     public String getBotUsername() {
@@ -64,36 +79,6 @@ public class WebApp extends TelegramLongPollingBot {
 
     public static void main(String[] args) throws TelegramApiException {
 
-        var objectMapper = createObjectMapper();
-        fachadaColaboradores = new ColaboradoresProxy(objectMapper);
-
-        // Se crea un nuevo Bot API
-        final TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
-        try {
-            // Se registra el bot
-            telegramBotsApi.registerBot(new WebApp());
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
-
-
-    }
-
-    public static ObjectMapper createObjectMapper() {
-        var objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        var sdf = new SimpleDateFormat(Constants.DEFAULT_SERIALIZATION_FORMAT, Locale.getDefault());
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-        objectMapper.setDateFormat(sdf);
-        return objectMapper;
-    }
-}
-
-/*    public static void main(String[] args) {
-
-
         final var registry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
         registry.config().commonTags("app", "metrics-sample");
 
@@ -101,9 +86,13 @@ public class WebApp extends TelegramLongPollingBot {
         var objectMapper = createObjectMapper();
         var fachada = new Fachada();
 
-        fachada.setViandasProxy(new ViandasProxy(objectMapper));
-        fachada.setHeladerasProxy(new HeladerasProxy(objectMapper));
-        fachada.setColaboradoresProxy(new ColaboradoresProxy(objectMapper));
+        fachadaViandas = new ViandasProxy(objectMapper);
+        fachadaHeladeras = new HeladerasProxy(objectMapper);
+        fachadaColaboradores = new ColaboradoresProxy(objectMapper);
+
+        fachada.setViandasProxy(fachadaViandas);
+        fachada.setColaboradoresProxy(fachadaColaboradores);
+        fachada.setHeladerasProxy(fachadaHeladeras);
         fachada.setRegistry(registry);
 
         var port = Integer.parseInt(env.getOrDefault("PORT", "8080"));
@@ -163,5 +152,26 @@ public class WebApp extends TelegramLongPollingBot {
             // Cuerpo de la respuesta
             ctx.result("{\"error\": \"" + e.getMessage() + "\"}");
         });
+
+        // Se crea un nuevo Bot API
+        final TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
+        try {
+            // Se registra el bot
+            telegramBotsApi.registerBot(new WebApp());
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+
     }
-*/
+
+    public static ObjectMapper createObjectMapper() {
+        var objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        var sdf = new SimpleDateFormat(Constants.DEFAULT_SERIALIZATION_FORMAT, Locale.getDefault());
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        objectMapper.setDateFormat(sdf);
+        return objectMapper;
+    }
+}
