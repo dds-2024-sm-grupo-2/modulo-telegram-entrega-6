@@ -87,6 +87,8 @@ public class WebApp extends TelegramLongPollingBot {
                         formasLista.add(MisFormasDeColaborar.valueOf(forma.toUpperCase()));
                     }
 
+                    System.out.println(formasLista);
+
                     FormasDeColaborarDTO formasDeColaborarDTO = new FormasDeColaborarDTO();
 
                     formasDeColaborarDTO.setFormas(formasLista);
