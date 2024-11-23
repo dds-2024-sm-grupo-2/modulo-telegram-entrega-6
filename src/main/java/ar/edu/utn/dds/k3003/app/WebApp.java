@@ -5,6 +5,7 @@ import ar.edu.utn.dds.k3003.controller.IncidenteController;
 import ar.edu.utn.dds.k3003.facades.dtos.Constants;
 import ar.edu.utn.dds.k3003.facades.exceptions.TrasladoNoAsignableException;
 import ar.edu.utn.dds.k3003.model.dtos.ColaboradorDTO;
+import ar.edu.utn.dds.k3003.model.dtos.FormasDeColaborarDTO;
 import ar.edu.utn.dds.k3003.model.enums.MisFormasDeColaborar;
 import io.javalin.Javalin;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -86,7 +87,11 @@ public class WebApp extends TelegramLongPollingBot {
                         formasLista.add(MisFormasDeColaborar.valueOf(forma.toUpperCase()));
                     }
 
-                    fachadaColaboradores.cambiarFormas(id, formasLista);
+                    FormasDeColaborarDTO formasDeColaborarDTO = new FormasDeColaborarDTO();
+
+                    formasDeColaborarDTO.setFormas(formasLista);
+
+                    fachadaColaboradores.cambiarFormas(id, formasDeColaborarDTO);
 
                     SendMessage msg2 = new SendMessage();
                     msg2.setChatId(chat_id);

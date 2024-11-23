@@ -5,6 +5,7 @@ import ar.edu.utn.dds.k3003.facades.FachadaHeladeras;
 import ar.edu.utn.dds.k3003.facades.FachadaLogistica;
 import ar.edu.utn.dds.k3003.facades.FachadaViandas;
 import ar.edu.utn.dds.k3003.facades.dtos.*;
+import ar.edu.utn.dds.k3003.model.dtos.FormasDeColaborarDTO;
 import ar.edu.utn.dds.k3003.model.dtos.IncidenteDTO;
 import ar.edu.utn.dds.k3003.model.enums.MisFormasDeColaborar;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -43,7 +44,7 @@ public class ColaboradoresProxy implements FachadaColaboradores {
         }
     }
 
-    public void cambiarFormas(Long id, List<MisFormasDeColaborar> formas){
+    public void cambiarFormas(Long id, FormasDeColaborarDTO formas){
         try {
             Response<Void> response = service.cambiarFormas(id, formas).execute();
             if (!response.isSuccessful()) {
