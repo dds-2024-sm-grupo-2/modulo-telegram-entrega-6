@@ -83,8 +83,11 @@ public class WebApp extends TelegramLongPollingBot {
                     // Divide por comas y convierte a una lista
                     List<String> formas = Arrays.asList(sinCorchetes.split("\\s*,\\s*"));
                     List<MisFormasDeColaborar> formasLista = new ArrayList<>();
-                    for(String forma : formas){
-                        formasLista.add(MisFormasDeColaborar.valueOf(forma.toUpperCase()));
+
+                    System.out.println(formas);
+
+                    for(int i=0; i<formas.size(); i++){
+                        formasLista.add(MisFormasDeColaborar.valueOf(formas.get(i).toUpperCase()));
                     }
 
                     System.out.println(formasLista);
