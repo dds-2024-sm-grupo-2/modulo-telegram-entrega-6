@@ -119,7 +119,7 @@ public class WebApp extends TelegramLongPollingBot {
 
     @Override
     public String getBotToken() {
-        return "8048605483:AAEz5Bomzvm6QW2F-v6Cm_X7dYNjWo3Pplg";
+        return "8048605483:AAHi8jiQ7cSJfNsmGZZhV261K1zAhXjg5YI";
     }
 
     public static void main(String[] args) throws TelegramApiException {
