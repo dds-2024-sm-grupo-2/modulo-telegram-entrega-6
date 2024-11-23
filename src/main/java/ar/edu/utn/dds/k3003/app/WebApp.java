@@ -1,21 +1,18 @@
 package ar.edu.utn.dds.k3003.app;
 
 import ar.edu.utn.dds.k3003.clients.ColaboradoresProxy;
-import ar.edu.utn.dds.k3003.clients.HeladerasProxy;
-import ar.edu.utn.dds.k3003.clients.ViandasProxy;
 import ar.edu.utn.dds.k3003.controller.IncidenteController;
 import ar.edu.utn.dds.k3003.facades.dtos.Constants;
 import ar.edu.utn.dds.k3003.facades.exceptions.TrasladoNoAsignableException;
 import ar.edu.utn.dds.k3003.model.dtos.ColaboradorDTO;
+import ar.edu.utn.dds.k3003.model.enums.MisFormasDeColaborar;
 import io.javalin.Javalin;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.text.SimpleDateFormat;
-import java.util.Locale;
-import java.util.NoSuchElementException;
-import java.util.TimeZone;
+import java.util.*;
 
 import io.javalin.micrometer.MicrometerPlugin;
 import io.micrometer.core.instrument.binder.jvm.JvmGcMetrics;
@@ -35,8 +32,6 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 public class WebApp extends TelegramLongPollingBot {
 
     private static ColaboradoresProxy fachadaColaboradores;
-    private static ViandasProxy fachadaViandas;
-    private static HeladerasProxy fachadaHeladeras;
 
     @Override
     public void onUpdateReceived(Update update) {
@@ -49,28 +44,61 @@ public class WebApp extends TelegramLongPollingBot {
 
             switch (mensaje_dividido[0]) {
                 case "/start":
-                    //TODO: Hacer logica para que mande un mensaje de bienvenida
-                    return;
-                case "/datos":
-                    var id_colaborador = Long.parseLong(mensaje_dividido[1]);
-                    ColaboradorDTO colaboradorDTO = fachadaColaboradores.getColab(id_colaborador);
-
                     SendMessage msg = new SendMessage();
                     msg.setChatId(chat_id);
-                    msg.setText("DATOS DEL COLABORADOR: \n"
-                            + "ID: " +  colaboradorDTO.getId()
-                            + "\nNOMBRE: " + colaboradorDTO.getNombre()
-                            + "\nPUNTOS: " + colaboradorDTO.getPuntos()
-                            + "\nDINERO_DONADO: " + colaboradorDTO.getDineroDonado()
-                            + "\nHELADERAS_REPARADAS: " + colaboradorDTO.getHeladerasReparadas()
-                            + "\nFORMAS_DE_COLABORAR: " + colaboradorDTO.getFormas().stream().toString());
-
+                    msg.setText("BIENVENIDO AL CHATBOT DEL TP DE DISEÑO - 2024\n " +
+                            "PARA CONTINUAR, UTILIZA ALGUNO DE LOS SIGUEINTES COMANDOS: \n" +
+                            "/datos {colabID} \n" +
+                            "/cambiarFormas {colabID} {[formas]}");
                     try {
                         execute(msg);
                     } catch (TelegramApiException e) {
                         throw new RuntimeException(e);
                     }
+                case "/datos":
+                    var id_colaborador = Long.parseLong(mensaje_dividido[1]);
+                    ColaboradorDTO colaboradorDTO = fachadaColaboradores.getColab(id_colaborador);
+
+                    SendMessage msg1 = new SendMessage();
+                    msg1.setChatId(chat_id);
+                    msg1.setText("DATOS DEL COLABORADOR: \n"
+                            + "ID: " +  colaboradorDTO.getId()
+                            + "\nNOMBRE: " + colaboradorDTO.getNombre()
+                            + "\nPUNTOS: " + colaboradorDTO.getPuntos()
+                            + "\nDINERO_DONADO: " + colaboradorDTO.getDineroDonado()
+                            + "\nHELADERAS_REPARADAS: " + colaboradorDTO.getHeladerasReparadas()
+                            //+ "\nFORMAS_DE_COLABORAR: " + colaboradorDTO.getFormas(); TODO: ARREGLAR COMO PRINTEA UNA LISTA
+                            );
+
+                    try {
+                        execute(msg1);
+                    } catch (TelegramApiException e) {
+                        throw new RuntimeException(e);
+                    }
+                case "/cambiarFormas":
+                    var id = Long.parseLong(mensaje_dividido[1]);
+                    var formasSTR = mensaje_dividido[2];
+                    String sinCorchetes = formasSTR.replace("[", "").replace("]", "").trim();
+                    // Divide por comas y convierte a una lista
+                    List<String> formas = Arrays.asList(sinCorchetes.split("\\s*,\\s*"));
+                    List<MisFormasDeColaborar> formasLista = new ArrayList<>();
+                    for(String forma : formas){
+                        formasLista.add(MisFormasDeColaborar.valueOf(forma.toUpperCase()));
+                    }
+
+                    fachadaColaboradores.cambiarFormas(id, formasLista);
+
+                    SendMessage msg2 = new SendMessage();
+                    msg2.setChatId(chat_id);
+                    msg2.setText("Formas cambiadas correctamente");
+
+                    try {
+                        execute(msg2);
+                    } catch (TelegramApiException e) {
+                        throw new RuntimeException(e);
+                    }
             }
+
         }
     }
     @Override
@@ -92,13 +120,10 @@ public class WebApp extends TelegramLongPollingBot {
         var objectMapper = createObjectMapper();
         var fachada = new Fachada();
 
-        fachadaViandas = new ViandasProxy(objectMapper);
-        fachadaHeladeras = new HeladerasProxy(objectMapper);
-        fachadaColaboradores = new ColaboradoresProxy(objectMapper);
 
-        fachada.setViandasProxy(fachadaViandas);
+        fachadaColaboradores = new ColaboradoresProxy(objectMapper);
         fachada.setColaboradoresProxy(fachadaColaboradores);
-        fachada.setHeladerasProxy(fachadaHeladeras);
+
         fachada.setRegistry(registry);
 
         var port = Integer.parseInt(env.getOrDefault("PORT", "8080"));

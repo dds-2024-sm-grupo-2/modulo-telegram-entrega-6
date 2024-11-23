@@ -6,6 +6,7 @@ import ar.edu.utn.dds.k3003.facades.FachadaLogistica;
 import ar.edu.utn.dds.k3003.facades.FachadaViandas;
 import ar.edu.utn.dds.k3003.facades.dtos.*;
 import ar.edu.utn.dds.k3003.model.dtos.IncidenteDTO;
+import ar.edu.utn.dds.k3003.model.enums.MisFormasDeColaborar;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
@@ -34,11 +35,22 @@ public class ColaboradoresProxy implements FachadaColaboradores {
         try {
             Response<ar.edu.utn.dds.k3003.model.dtos.ColaboradorDTO> response = service.getColab(id).execute();
             if (!response.isSuccessful()) {
-                throw new RuntimeException("No se pudo solicitar al colaborador: " + response.errorBody().string());
+                throw new RuntimeException("No se pudo obtener al colaborador: " + response.errorBody().string());
             }
             return response.body();
         } catch (IOException e) {
-            throw new RuntimeException("Error al solicitar colaborador: ", e);
+            throw new RuntimeException("Error al obtener al colaborador: ", e);
+        }
+    }
+
+    public void cambiarFormas(Long id, List<MisFormasDeColaborar> formas){
+        try {
+            Response<Void> response = service.cambiarFormas(id, formas).execute();
+            if (!response.isSuccessful()) {
+                throw new RuntimeException("No se pudo cambiar las formas: " + response.errorBody().string());
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Error al cambiar las formas: ", e);
         }
     }
 
