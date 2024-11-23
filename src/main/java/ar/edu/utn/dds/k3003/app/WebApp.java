@@ -80,14 +80,15 @@ public class WebApp extends TelegramLongPollingBot {
                     var id = Long.parseLong(mensaje_dividido[1]);
                     var formasSTR = mensaje_dividido[2];
                     String sinCorchetes = formasSTR.replace("[", "").replace("]", "").trim();
+                    System.out.println(sinCorchetes);
                     // Divide por comas y convierte a una lista
-                    List<String> formas = Arrays.asList(sinCorchetes.split("\\s*,\\s*"));
+                    String[] formas = sinCorchetes.split(",");
                     List<MisFormasDeColaborar> formasLista = new ArrayList<>();
 
                     System.out.println(formas);
 
-                    for(int i=0; i<formas.size(); i++){
-                        formasLista.add(MisFormasDeColaborar.valueOf(formas.get(i).toUpperCase()));
+                    for(String forma: formas){
+                        formasLista.add(MisFormasDeColaborar.valueOf(forma.toUpperCase()));
                     }
 
                     System.out.println(formasLista);
