@@ -410,9 +410,12 @@ public class WebApp extends TelegramLongPollingBot {
     public static void main(String[] args) throws TelegramApiException {
 
         var objectMapper = createObjectMapper();
+
         fachadaColaboradores = new ColaboradoresProxy(objectMapper);
         fachadaIncidentes = new IncidentesProxy(objectMapper);
         fachadaLogistica = new LogisticaProxy(objectMapper);
+        fachadaHeladeras = new HeladerasProxy(objectMapper);
+        fachadaViandas = new ViandasProxy(objectMapper);
 
         final var registry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
         registry.config().commonTags("app", "metrics-sample");
