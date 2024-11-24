@@ -1,18 +1,11 @@
 package ar.edu.utn.dds.k3003.app;
 
-import ar.edu.utn.dds.k3003.clients.ColaboradoresProxy;
-import ar.edu.utn.dds.k3003.controller.IncidenteController;
-import ar.edu.utn.dds.k3003.facades.dtos.Constants;
+import ar.edu.utn.dds.k3003.clients.*;
 import ar.edu.utn.dds.k3003.facades.exceptions.TrasladoNoAsignableException;
 import ar.edu.utn.dds.k3003.model.dtos.ColaboradorDTO;
 import ar.edu.utn.dds.k3003.model.dtos.FormasDeColaborarDTO;
 import ar.edu.utn.dds.k3003.model.enums.MisFormasDeColaborar;
 import io.javalin.Javalin;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 import io.javalin.micrometer.MicrometerPlugin;
@@ -33,22 +26,32 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 public class WebApp extends TelegramLongPollingBot {
 
     private static ColaboradoresProxy fachadaColaboradores;
+    private static LogisticaProxy fachadaLogistica;
+    private static IncidentesProxy fachadaIncidentes;
+    private static HeladerasProxy fachadaHeladeras;
+    private static ViandasProxy fachadaViandas;
 
     @Override
     public void onUpdateReceived(Update update) {
 
+        // Se verifica si el update tiene un mensaje y si el mensaje tiene texto
         if (update.hasMessage() && update.getMessage().hasText()) {
+
+            // Se obtiene el chat_id y el mensaje recibido
             var chat_id = update.getMessage().getChatId();
             var message_received = update.getMessage().getText();
 
-            var mensaje_dividido = message_received.split(" ");
+            // Se divide el mensaje recibido por espacios
+            var comando = message_received.split(" ");
 
-            switch (mensaje_dividido[0]) {
-                case "/start":
+            // Se evalua el comando recibido
+            switch (comando[0]) {
+                // Modulo Colaboradores
+                case "/iniciar": {
                     SendMessage msg = new SendMessage();
                     msg.setChatId(chat_id);
                     msg.setText("BIENVENIDO AL CHATBOT DEL TP DE DISEÑO - 2024\n " +
-                            "PARA CONTINUAR, UTILIZA ALGUNO DE LOS SIGUEINTES COMANDOS: \n" +
+                            "PARA CONTINUAR, UTILIZA ALGUNO DE LOS SIGUIENTES COMANDOS: \n" +
                             "/datos {colabID} \n" +
                             "/cambiarFormas {colabID} {[formas]}");
                     try {
@@ -56,29 +59,33 @@ public class WebApp extends TelegramLongPollingBot {
                     } catch (TelegramApiException e) {
                         throw new RuntimeException(e);
                     }
-                case "/datos":
-                    var id_colaborador = Long.parseLong(mensaje_dividido[1]);
+                    break;
+                }
+                case "/datos_colaborador": {
+                    var id_colaborador = Long.parseLong(comando[1]);
                     ColaboradorDTO colaboradorDTO = fachadaColaboradores.getColab(id_colaborador);
 
                     SendMessage msg1 = new SendMessage();
                     msg1.setChatId(chat_id);
                     msg1.setText("DATOS DEL COLABORADOR: \n"
-                            + "ID: " +  colaboradorDTO.getId()
-                            + "\nNOMBRE: " + colaboradorDTO.getNombre()
-                            + "\nPUNTOS: " + colaboradorDTO.getPuntos()
-                            + "\nDINERO_DONADO: " + colaboradorDTO.getDineroDonado()
-                            + "\nHELADERAS_REPARADAS: " + colaboradorDTO.getHeladerasReparadas()
+                                    + "ID: " + colaboradorDTO.getId()
+                                    + "\nNOMBRE: " + colaboradorDTO.getNombre()
+                                    + "\nPUNTOS: " + colaboradorDTO.getPuntos()
+                                    + "\nDINERO_DONADO: " + colaboradorDTO.getDineroDonado()
+                                    + "\nHELADERAS_REPARADAS: " + colaboradorDTO.getHeladerasReparadas()
                             //+ "\nFORMAS_DE_COLABORAR: " + colaboradorDTO.getFormas(); TODO: ARREGLAR COMO PRINTEA UNA LISTA
-                            );
+                    );
 
                     try {
                         execute(msg1);
                     } catch (TelegramApiException e) {
                         throw new RuntimeException(e);
                     }
-                case "/cambiarFormas":
-                    var id = Long.parseLong(mensaje_dividido[1]);
-                    var formasSTR = mensaje_dividido[2];
+                    break;
+                }
+                case "/cambiar_formas_colaborar": {
+                    var id = Long.parseLong(comando[1]);
+                    var formasSTR = comando[2];
                     String sinCorchetes = formasSTR.replace("[", "").replace("]", "").trim();
                     System.out.println(sinCorchetes);
                     // Divide por comas y convierte a una lista
@@ -87,7 +94,7 @@ public class WebApp extends TelegramLongPollingBot {
 
                     System.out.println(formas);
 
-                    for(String forma: formas){
+                    for (String forma : formas) {
                         formasLista.add(MisFormasDeColaborar.valueOf(forma.toUpperCase()));
                     }
 
@@ -108,18 +115,201 @@ public class WebApp extends TelegramLongPollingBot {
                     } catch (TelegramApiException e) {
                         throw new RuntimeException(e);
                     }
+                    break;
+                }
+                // Modulo Logistica
+                case "/nueva_ruta": {
+                    SendMessage msg = new SendMessage();
+                    msg.setChatId(chat_id);
+                    msg.setText("Comando no implementado");
+                    try {
+                        execute(msg);
+                    } catch (TelegramApiException e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+                }
+                case "/asignar_traslado": {
+                    SendMessage msg = new SendMessage();
+                    msg.setChatId(chat_id);
+                    msg.setText("Comando no implementado");
+                    try {
+                        execute(msg);
+                    } catch (TelegramApiException e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+                }
+                case "/modificar_traslado": {
+                    SendMessage msg = new SendMessage();
+                    msg.setChatId(chat_id);
+                    msg.setText("Comando no implementado");
+                    try {
+                        execute(msg);
+                    } catch (TelegramApiException e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+                }
+                // Modulo Incidentes
+                case "/reportar_incidente": {
+                    SendMessage msg = new SendMessage();
+                    msg.setChatId(chat_id);
+                    msg.setText("Comando no implementado");
+                    try {
+                        execute(msg);
+                    } catch (TelegramApiException e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+                }
+                case "/resolver_incidente": {
+                    SendMessage msg = new SendMessage();
+                    msg.setChatId(chat_id);
+                    msg.setText("Comando no implementado");
+                    try {
+                        execute(msg);
+                    } catch (TelegramApiException e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+                }
+                case "/listar_incidentes": {
+                    SendMessage msg = new SendMessage();
+                    msg.setChatId(chat_id);
+                    msg.setText("Comando no implementado");
+                    try {
+                        execute(msg);
+                    } catch (TelegramApiException e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+                }
+                // Modulo Heladeras
+                case "/listar_heladeras_zona": {
+                    SendMessage msg = new SendMessage();
+                    msg.setChatId(chat_id);
+                    msg.setText("Comando no implementado");
+                    try {
+                        execute(msg);
+                    } catch (TelegramApiException e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+                }
+                case "/listar_disponibilidad_heladera": {
+                    SendMessage msg = new SendMessage();
+                    msg.setChatId(chat_id);
+                    msg.setText("Comando no implementado");
+                    try {
+                        execute(msg);
+                    } catch (TelegramApiException e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+                }
+                case "/listar_retiros_diarios_heladera": {
+                    SendMessage msg = new SendMessage();
+                    msg.setChatId(chat_id);
+                    msg.setText("Comando no implementado");
+                    try {
+                        execute(msg);
+                    } catch (TelegramApiException e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+                }
+                case "/subscribirse_heladera": {
+                    SendMessage msg = new SendMessage();
+                    msg.setChatId(chat_id);
+                    msg.setText("Comando no implementado");
+                    try {
+                        execute(msg);
+                    } catch (TelegramApiException e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+                }
+                case "/desubscribirse_heladera": {
+                    SendMessage msg = new SendMessage();
+                    msg.setChatId(chat_id);
+                    msg.setText("Comando no implementado");
+                    try {
+                        execute(msg);
+                    } catch (TelegramApiException e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+                }
+                case "/subscribirse_evento_heladera": {
+                    SendMessage msg = new SendMessage();
+                    msg.setChatId(chat_id);
+                    msg.setText("Comando no implementado");
+                    try {
+                        execute(msg);
+                    } catch (TelegramApiException e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+                }
+                // Modulo Viandas
+                case "/nueva_vianda": {
+                    SendMessage msg = new SendMessage();
+                    msg.setChatId(chat_id);
+                    msg.setText("Comando no implementado");
+                    try {
+                        execute(msg);
+                    } catch (TelegramApiException e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+                }
+                case "/depositar_vianda": {
+                    SendMessage msg = new SendMessage();
+                    msg.setChatId(chat_id);
+                    msg.setText("Comando no implementado");
+                    try {
+                        execute(msg);
+                    } catch (TelegramApiException e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+                }
+                case "/retirar_vianda": {
+                    SendMessage msg = new SendMessage();
+                    msg.setChatId(chat_id);
+                    msg.setText("Comando no implementado");
+                    try {
+                        execute(msg);
+                    } catch (TelegramApiException e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+                }
+                // Comando no reconocido
+                default: {
+                    SendMessage msg = new SendMessage();
+                    msg.setChatId(chat_id);
+                    msg.setText("Comando no reconocido. Por favor, utilice /start para ver los comandos disponibles.");
+                    try {
+                        execute(msg);
+                    } catch (TelegramApiException e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+                }
             }
-
         }
     }
+
     @Override
     public String getBotUsername() {
-        return "DiSis24Bot";
+        return System.getenv("NOMBRE_BOT");
     }
 
     @Override
     public String getBotToken() {
-        return "8048605483:AAHi8jiQ7cSJfNsmGZZhV261K1zAhXjg5YI";
+        return System.getenv("TOKEN_BOT");
     }
 
     public static void main(String[] args) throws TelegramApiException {
@@ -128,14 +318,6 @@ public class WebApp extends TelegramLongPollingBot {
         registry.config().commonTags("app", "metrics-sample");
 
         var env = System.getenv();
-        var objectMapper = createObjectMapper();
-        var fachada = new Fachada();
-
-
-        fachadaColaboradores = new ColaboradoresProxy(objectMapper);
-        fachada.setColaboradoresProxy(fachadaColaboradores);
-
-        fachada.setRegistry(registry);
 
         var port = Integer.parseInt(env.getOrDefault("PORT", "8080"));
 
@@ -150,25 +332,12 @@ public class WebApp extends TelegramLongPollingBot {
 
         final var micrometerPlugin = new MicrometerPlugin(config -> config.registry = registry);
 
-        var incidentesController = new IncidenteController(fachada);
-
         var app = Javalin.create(config -> { config.registerPlugin(micrometerPlugin); }).start(port);
-
-        // Home
-        app.get("/", ctx -> ctx.result("Modulo Frontend - Diseño de Sistemas K3003 - UTN FRBA"));
-
-        // Maquetacion de los endpoints de incidentes
-        app.post("/incidentes", incidentesController::agregar);
-        app.get("/incidentes/{id}", incidentesController::obtener);
-        app.patch("/incidentes/{id}", incidentesController::actualizar);
-
-        // Endpoint para eliminar todos los incidentes
-        app.delete("/incidentes", incidentesController::eliminar);
 
         // Endpoint para obtener las métricas
         app.get("/metrics", ctx -> {
             var auth = ctx.header("Authorization");
-            if (auth != null && auth.equals("Bearer " + env.get("TOKEN"))) {
+            if (auth != null && auth.equals("Bearer " + env.get("TOKEN_METRICAS"))) {
                 ctx.contentType("text/plain; version=0.0.4")
                         .result(registry.scrape());
             } else {
@@ -204,16 +373,5 @@ public class WebApp extends TelegramLongPollingBot {
             e.printStackTrace();
         }
 
-    }
-
-    public static ObjectMapper createObjectMapper() {
-        var objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        var sdf = new SimpleDateFormat(Constants.DEFAULT_SERIALIZATION_FORMAT, Locale.getDefault());
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-        objectMapper.setDateFormat(sdf);
-        return objectMapper;
     }
 }
