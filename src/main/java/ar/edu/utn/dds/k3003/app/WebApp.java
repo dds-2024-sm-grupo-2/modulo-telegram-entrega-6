@@ -66,7 +66,7 @@ public class WebApp extends TelegramLongPollingBot {
                             "/cambiar_formas_colaborar {colaboradorId} {[formas]} \n" +
                             "/nueva_ruta {colaboradorId} {heladeraIdOrigen} {heladeraIdDestino} \n" +
                             "/asignar_traslado {qrVianda} {heladeraIdOrigen} {heladeraIdDestino} \n" +
-                            "/modificar_traslado {idTraslado} {estadoTraslado} \n"
+                            "/modificar_traslado {idTraslado} {estadoTraslado} \n" +
                             "/resolver_incidente {idIncidente} \n");
                     try {
                         execute(msg);
