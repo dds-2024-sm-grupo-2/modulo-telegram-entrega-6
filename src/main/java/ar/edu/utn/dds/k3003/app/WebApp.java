@@ -129,6 +129,18 @@ public class WebApp extends TelegramLongPollingBot {
                 // Modulo Logistica
                 case "/nueva_ruta": { // {colaboradorId} {heladeraIdOrigen} {heladeraIdDestino}
 
+                    if(comando.length != 3) {
+                        SendMessage msg = new SendMessage();
+                        msg.setChatId(chat_id);
+                        msg.setText("Comando incorrecto. Por favor, utilice /iniciar para ver los comandos disponibles.");
+                        try {
+                            execute(msg);
+                        } catch (TelegramApiException e) {
+                            throw new RuntimeException(e);
+                        }
+                        break;
+                    }
+
                     var colaboradorId = Long.parseLong(comando[1]);
                     var heladeraIdOrigen = Integer.parseInt(comando[2]);
                     var heladeraIdDestino = Integer.parseInt(comando[3]);
