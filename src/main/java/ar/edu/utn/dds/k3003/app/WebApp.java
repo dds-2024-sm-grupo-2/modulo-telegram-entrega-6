@@ -52,8 +52,8 @@ public class WebApp extends TelegramLongPollingBot {
                     msg.setChatId(chat_id);
                     msg.setText("BIENVENIDO AL CHATBOT DEL TP DE DISEÑO - 2024\n " +
                             "PARA CONTINUAR, UTILIZA ALGUNO DE LOS SIGUIENTES COMANDOS: \n" +
-                            "/datos {colabID} \n" +
-                            "/cambiarFormas {colabID} {[formas]}");
+                            "/datos_colaborador {colabID} \n" +
+                            "/cambiar_formas_colaborar {colabID} {[formas]}");
                     try {
                         execute(msg);
                     } catch (TelegramApiException e) {
