@@ -2,6 +2,7 @@ package ar.edu.utn.dds.k3003.app;
 
 import ar.edu.utn.dds.k3003.clients.*;
 import ar.edu.utn.dds.k3003.facades.dtos.Constants;
+import ar.edu.utn.dds.k3003.facades.dtos.RutaDTO;
 import ar.edu.utn.dds.k3003.facades.exceptions.TrasladoNoAsignableException;
 import ar.edu.utn.dds.k3003.model.dtos.ColaboradorDTO;
 import ar.edu.utn.dds.k3003.model.dtos.FormasDeColaborarDTO;
@@ -59,8 +60,9 @@ public class WebApp extends TelegramLongPollingBot {
                     msg.setChatId(chat_id);
                     msg.setText("BIENVENIDO AL CHATBOT DEL TP DE DISEÑO - 2024\n " +
                             "PARA CONTINUAR, UTILIZA ALGUNO DE LOS SIGUIENTES COMANDOS: \n" +
-                            "/datos_colaborador {colabID} \n" +
-                            "/cambiar_formas_colaborar {colabID} {[formas]}");
+                            "/datos_colaborador {colaboradorId} \n" +
+                            "/cambiar_formas_colaborar {colaboradorId} {[formas]} \n" +
+                            "/nueva_ruta {colaboradorId} {heladeraIdOrigen} {heladeraIdDestino} \n");
                     try {
                         execute(msg);
                     } catch (TelegramApiException e) {
@@ -125,10 +127,17 @@ public class WebApp extends TelegramLongPollingBot {
                     break;
                 }
                 // Modulo Logistica
-                case "/nueva_ruta": {
+                case "/nueva_ruta": { // {colaboradorId} {heladeraIdOrigen} {heladeraIdDestino}
+
+                    var colaboradorId = Long.parseLong(comando[1]);
+                    var heladeraIdOrigen = Integer.parseInt(comando[2]);
+                    var heladeraIdDestino = Integer.parseInt(comando[3]);
+
+                    RutaDTO nueva_ruta = fachadaLogistica.nueva_ruta(colaboradorId, heladeraIdOrigen, heladeraIdDestino);
+
                     SendMessage msg = new SendMessage();
                     msg.setChatId(chat_id);
-                    msg.setText("Comando no implementado");
+                    msg.setText("Ruta creada correctamente. El ID de la ruta es: " + nueva_ruta.getId());
                     try {
                         execute(msg);
                     } catch (TelegramApiException e) {
