@@ -13,6 +13,8 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.javalin.Javalin;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.*;
 
 import io.javalin.micrometer.MicrometerPlugin;
@@ -346,7 +348,7 @@ public class WebApp extends TelegramLongPollingBot {
                     break;
                 }
                 // Modulo Viandas
-                case "/nueva_vianda": { //{id} {CodigoQR} {fechaelab???} {estado} {Colaborarid} {heladeraID}
+                case "/nueva_vianda": { //{CodigoQR} {fechaelab???} {estado} {Colaborarid} {heladeraID}
                     if(comando.length != 7) {
                         SendMessage msg = new SendMessage();
                         msg.setChatId(chat_id);
@@ -358,19 +360,17 @@ public class WebApp extends TelegramLongPollingBot {
                         }
                         break;
                     }
-                    var id = Integer.parseInt(comando[1]);
-                    var codigoQR = String.valueOf(comando[2]);
-                    var fechaElaboracion = Integer.parseInt(comando[3]); //como es el tema de la fechaaaaaaa
-                    var estado = EstadoViandaEnum.valueOf(comando[4]);
-                    var colaboradorid = Integer.parseInt(comando[5]);
-                    var heladeraid = Integer.parseInt(comando[6]);
+                    var codigoQR = String.valueOf(comando[1]);
+                    var fechaElaboracion = LocalDateTime.parse(comando[2]); // Convertir la fecha a ZonedDateTime CHEQUEAR ESTOOOOOOO
+                    var estado = EstadoViandaEnum.valueOf(comando[3]);
+                    var colaboradorid = Long.parseLong(comando[4]);
+                    var heladeraid = Integer.parseInt(comando[5]);
 
-                    //fachadaViandas.agregar(id, codigoQR, fechaElaboracion, estado, colaboradorid, heladeraid);
+                    fachadaViandas.agregar(codigoQR, fechaElaboracion, estado, colaboradorid, heladeraid);
 
                     SendMessage msg = new SendMessage();
                     msg.setChatId(chat_id);
                     msg.setText("Vianda creada correctamente" +
-                            "\nId: " + id +
                             "\nCodigo QR: " + codigoQR +
                             "\nFecha Elaboracion: " + fechaElaboracion +
                             "\nEstado: " + estado +

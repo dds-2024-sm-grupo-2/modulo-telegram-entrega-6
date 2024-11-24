@@ -3,6 +3,7 @@ package ar.edu.utn.dds.k3003.clients;
 import ar.edu.utn.dds.k3003.facades.FachadaHeladeras;
 import ar.edu.utn.dds.k3003.facades.FachadaViandas;
 import ar.edu.utn.dds.k3003.facades.dtos.EstadoViandaEnum;
+import ar.edu.utn.dds.k3003.facades.dtos.RutaDTO;
 import ar.edu.utn.dds.k3003.facades.dtos.ViandaDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
@@ -10,6 +11,7 @@ import io.javalin.http.HttpStatus;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.*;
 import lombok.SneakyThrows;
 import retrofit2.Response;
@@ -31,6 +33,17 @@ public class ViandasProxy implements FachadaViandas {
     @Override
     public ViandaDTO agregar(ViandaDTO viandaDTO) {
         return null;
+    }
+//CHEQUEAR
+    public void agregar(String codigoQR, LocalDateTime fechaElaboracion, EstadoViandaEnum estado, Long colaboradorId, Integer heladeraId) {
+        try {
+            Response<Void> response = service.agregar(new ViandaDTO(codigoQR, fechaElaboracion, estado, colaboradorId, heladeraId)).execute();
+            if (!response.isSuccessful()) {
+                throw new RuntimeException("No se pudo crear la vianda: " + response.errorBody().string());
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Error al crear la vianda: ", e);
+        }
     }
 
     @Override
