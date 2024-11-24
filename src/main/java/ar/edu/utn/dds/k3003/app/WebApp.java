@@ -241,10 +241,27 @@ public class WebApp extends TelegramLongPollingBot {
                     }
                     break;
                 }
-                case "/resolver_incidente": {
+                case "/resolver_incidente": { // {incidenteId}
+
+                    if(comando.length != 2) {
+                        SendMessage msg = new SendMessage();
+                        msg.setChatId(chat_id);
+                        msg.setText("Comando incorrecto. Por favor, utilice /iniciar para ver los comandos disponibles.");
+                        try {
+                            execute(msg);
+                        } catch (TelegramApiException e) {
+                            throw new RuntimeException(e);
+                        }
+                        break;
+                    }
+
+                    var incidenteId = Long.parseLong(comando[1]);
+
+                    fachadaIncidentes.resolver_incidente(incidenteId);
+
                     SendMessage msg = new SendMessage();
                     msg.setChatId(chat_id);
-                    msg.setText("Comando no implementado");
+                    msg.setText("El incidente ID "+ incidenteId +" ha sido resuelto correctamente");
                     try {
                         execute(msg);
                     } catch (TelegramApiException e) {
