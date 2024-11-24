@@ -129,7 +129,7 @@ public class WebApp extends TelegramLongPollingBot {
                 // Modulo Logistica
                 case "/nueva_ruta": { // {colaboradorId} {heladeraIdOrigen} {heladeraIdDestino}
 
-                    if(comando.length != 3) {
+                    if(comando.length != 4) {
                         SendMessage msg = new SendMessage();
                         msg.setChatId(chat_id);
                         msg.setText("Comando incorrecto. Por favor, utilice /iniciar para ver los comandos disponibles.");
