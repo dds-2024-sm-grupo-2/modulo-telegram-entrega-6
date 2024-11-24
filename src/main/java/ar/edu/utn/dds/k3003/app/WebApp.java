@@ -290,7 +290,7 @@ public class WebApp extends TelegramLongPollingBot {
                 default: {
                     SendMessage msg = new SendMessage();
                     msg.setChatId(chat_id);
-                    msg.setText("Comando no reconocido. Por favor, utilice /start para ver los comandos disponibles.");
+                    msg.setText("Comando no reconocido. Por favor, utilice /iniciar para ver los comandos disponibles.");
                     try {
                         execute(msg);
                     } catch (TelegramApiException e) {
