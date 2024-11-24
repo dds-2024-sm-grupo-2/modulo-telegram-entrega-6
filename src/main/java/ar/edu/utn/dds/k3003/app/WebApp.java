@@ -174,7 +174,7 @@ public class WebApp extends TelegramLongPollingBot {
                     }
                     break;
                 }
-                case "/listar_incidentes": {
+                case "/listar_incidentes_heladera": {
                     SendMessage msg = new SendMessage();
                     msg.setChatId(chat_id);
                     msg.setText("Comando no implementado");

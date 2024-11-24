@@ -26,7 +26,7 @@
 #### Modulo Incidentes
 - `/reportar_incidente`: Reporta un nuevo incidente.
 - `/resolver_incidente`: Marca un incidente como resuelto.
-- `/listar_incidentes`: Lista todos los incidentes reportados.
+- `/listar_incidentes_heladera`: Lista todos los incidentes reportados en una heladera.
 
 #### Modulo Viandas
 - `/nueva_vianda`: Registra una nueva vianda.
