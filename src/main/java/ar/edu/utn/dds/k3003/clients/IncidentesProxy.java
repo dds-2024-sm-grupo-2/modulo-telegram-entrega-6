@@ -16,7 +16,7 @@ public class IncidentesProxy{
 
     public IncidentesProxy(ObjectMapper objectMapper) {
         var env = System.getenv();
-        this.endpoint = env.getOrDefault("URL_LOGISTICA", "http://localhost:8085/");
+        this.endpoint = env.getOrDefault("URL_INCIDENTES", "http://localhost:8085/");
         var retrofit = new Retrofit.Builder().baseUrl(this.endpoint).addConverterFactory(JacksonConverterFactory.create(objectMapper)).build();
         this.service = retrofit.create(LogisticaRetrofitClient.class);
     }
