@@ -25,14 +25,13 @@ public class LogisticaProxy{
         this.service = retrofit.create(LogisticaRetrofitClient.class);
     }
 
-    public RutaDTO nueva_ruta(Long colaboradorId, Integer heladeraIdOrigen, Integer heladeraIdDestino) {
+    public void nueva_ruta(Long colaboradorId, Integer heladeraIdOrigen, Integer heladeraIdDestino) {
         try {
             RutaDTO ruta = new RutaDTO(colaboradorId, heladeraIdOrigen, heladeraIdDestino);
-            Response<RutaDTO> response = service.nueva_ruta(ruta).execute();
+            Response<Void> response = service.nueva_ruta(ruta).execute();
             if (!response.isSuccessful()) {
                 throw new RuntimeException("No se pudo crear la ruta: " + response.errorBody().string());
             }
-            return response.body();
         } catch (IOException e) {
             throw new RuntimeException("Error al crear la ruta: ", e);
         }

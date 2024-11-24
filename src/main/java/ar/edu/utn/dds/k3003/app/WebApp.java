@@ -145,11 +145,14 @@ public class WebApp extends TelegramLongPollingBot {
                     var heladeraIdOrigen = Integer.parseInt(comando[2]);
                     var heladeraIdDestino = Integer.parseInt(comando[3]);
 
-                    RutaDTO nueva_ruta = fachadaLogistica.nueva_ruta(colaboradorId, heladeraIdOrigen, heladeraIdDestino);
+                    fachadaLogistica.nueva_ruta(colaboradorId, heladeraIdOrigen, heladeraIdDestino);
 
                     SendMessage msg = new SendMessage();
                     msg.setChatId(chat_id);
-                    msg.setText("Ruta creada correctamente. El ID de la ruta es: " + nueva_ruta.getId());
+                    msg.setText("Ruta creada correctamente" +
+                            "\nColaborador: " + colaboradorId +
+                            "\nHeladera Origen: " + heladeraIdOrigen +
+                            "\nHeladera Destino: " + heladeraIdDestino);
                     try {
                         execute(msg);
                     } catch (TelegramApiException e) {

@@ -10,7 +10,7 @@ import retrofit2.http.*;
 public interface LogisticaRetrofitClient {
 
     @POST("rutas")
-    Call<RutaDTO> nueva_ruta(@Body RutaDTO rutaDTO);
+    Call<Void> nueva_ruta(@Body RutaDTO rutaDTO);
 
     @PATCH("colaboradores/{colabID}")
     Call<Void> cambiarFormas(@Path("colabID") Long id, @Body FormasDeColaborarDTO formas);
