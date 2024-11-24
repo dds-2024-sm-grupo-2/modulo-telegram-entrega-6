@@ -1,11 +1,18 @@
 package ar.edu.utn.dds.k3003.app;
 
 import ar.edu.utn.dds.k3003.clients.*;
+import ar.edu.utn.dds.k3003.facades.dtos.Constants;
 import ar.edu.utn.dds.k3003.facades.exceptions.TrasladoNoAsignableException;
 import ar.edu.utn.dds.k3003.model.dtos.ColaboradorDTO;
 import ar.edu.utn.dds.k3003.model.dtos.FormasDeColaborarDTO;
 import ar.edu.utn.dds.k3003.model.enums.MisFormasDeColaborar;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.javalin.Javalin;
+
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import io.javalin.micrometer.MicrometerPlugin;
@@ -314,6 +321,10 @@ public class WebApp extends TelegramLongPollingBot {
 
     public static void main(String[] args) throws TelegramApiException {
 
+        var objectMapper = createObjectMapper();
+        fachadaColaboradores = new ColaboradoresProxy(objectMapper);
+        fachadaIncidentes = new IncidentesProxy(objectMapper);
+
         final var registry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
         registry.config().commonTags("app", "metrics-sample");
 
@@ -373,5 +384,16 @@ public class WebApp extends TelegramLongPollingBot {
             e.printStackTrace();
         }
 
+    }
+
+    public static ObjectMapper createObjectMapper() {
+        var objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        var sdf = new SimpleDateFormat(Constants.DEFAULT_SERIALIZATION_FORMAT, Locale.getDefault());
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        objectMapper.setDateFormat(sdf);
+        return objectMapper;
     }
 }
