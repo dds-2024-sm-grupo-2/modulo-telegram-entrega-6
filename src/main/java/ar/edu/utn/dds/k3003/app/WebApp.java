@@ -2,7 +2,9 @@ package ar.edu.utn.dds.k3003.app;
 
 import ar.edu.utn.dds.k3003.clients.*;
 import ar.edu.utn.dds.k3003.facades.dtos.Constants;
+import ar.edu.utn.dds.k3003.facades.dtos.EstadoTrasladoEnum;
 import ar.edu.utn.dds.k3003.facades.dtos.RutaDTO;
+import ar.edu.utn.dds.k3003.facades.dtos.TrasladoDTO;
 import ar.edu.utn.dds.k3003.facades.exceptions.TrasladoNoAsignableException;
 import ar.edu.utn.dds.k3003.model.dtos.ColaboradorDTO;
 import ar.edu.utn.dds.k3003.model.dtos.FormasDeColaborarDTO;
@@ -62,7 +64,9 @@ public class WebApp extends TelegramLongPollingBot {
                             "PARA CONTINUAR, UTILIZA ALGUNO DE LOS SIGUIENTES COMANDOS: \n" +
                             "/datos_colaborador {colaboradorId} \n" +
                             "/cambiar_formas_colaborar {colaboradorId} {[formas]} \n" +
-                            "/nueva_ruta {colaboradorId} {heladeraIdOrigen} {heladeraIdDestino} \n");
+                            "/nueva_ruta {colaboradorId} {heladeraIdOrigen} {heladeraIdDestino} \n" +
+                            "/asignar_traslado {qrVianda} {heladeraIdOrigen} {heladeraIdDestino} \n" +
+                            "/modificar_traslado {idTraslado} {estadoTraslado} \n");
                     try {
                         execute(msg);
                     } catch (TelegramApiException e) {
@@ -160,10 +164,33 @@ public class WebApp extends TelegramLongPollingBot {
                     }
                     break;
                 }
-                case "/asignar_traslado": {
+                case "/asignar_traslado": { // {qrVianda} {heladeraIdOrigen} {heladeraIdDestino}
+
+                    if(comando.length != 4) {
+                        SendMessage msg = new SendMessage();
+                        msg.setChatId(chat_id);
+                        msg.setText("Comando incorrecto. Por favor, utilice /iniciar para ver los comandos disponibles.");
+                        try {
+                            execute(msg);
+                        } catch (TelegramApiException e) {
+                            throw new RuntimeException(e);
+                        }
+                        break;
+                    }
+
+                    var qrVianda = String.valueOf(comando[1]);
+                    var heladeraIdOrigen = Integer.parseInt(comando[2]);
+                    var heladeraIdDestino = Integer.parseInt(comando[3]);
+
+                    TrasladoDTO traslado = fachadaLogistica.asignar_traslado(qrVianda, heladeraIdOrigen, heladeraIdDestino);
+
                     SendMessage msg = new SendMessage();
                     msg.setChatId(chat_id);
-                    msg.setText("Comando no implementado");
+                    msg.setText("Traslado asignado correctamente" +
+                            "\nID Traslado: " + traslado.getId() +
+                            "\nQR Vianda: " + qrVianda +
+                            "\nHeladera Origen: " + heladeraIdOrigen +
+                            "\nHeladera Destino: " + heladeraIdDestino);
                     try {
                         execute(msg);
                     } catch (TelegramApiException e) {
@@ -171,10 +198,30 @@ public class WebApp extends TelegramLongPollingBot {
                     }
                     break;
                 }
-                case "/modificar_traslado": {
+                case "/modificar_traslado": { // {idTraslado} {estadoTraslado}
+
+                    if(comando.length != 3) {
+                        SendMessage msg = new SendMessage();
+                        msg.setChatId(chat_id);
+                        msg.setText("Comando incorrecto. Por favor, utilice /iniciar para ver los comandos disponibles.");
+                        try {
+                            execute(msg);
+                        } catch (TelegramApiException e) {
+                            throw new RuntimeException(e);
+                        }
+                        break;
+                    }
+
+                    var idTraslado = Long.parseLong(comando[1]);
+                    var estadpTraslado = EstadoTrasladoEnum.valueOf(comando[2]);
+
+                    fachadaLogistica.modificar_traslado(idTraslado, estadpTraslado);
+
                     SendMessage msg = new SendMessage();
                     msg.setChatId(chat_id);
-                    msg.setText("Comando no implementado");
+                    msg.setText("Estado del traslado modificado correctamente" +
+                            "\nID Traslado: " + idTraslado +
+                            "\nNuevo estado Traslado: " + estadpTraslado);
                     try {
                         execute(msg);
                     } catch (TelegramApiException e) {
