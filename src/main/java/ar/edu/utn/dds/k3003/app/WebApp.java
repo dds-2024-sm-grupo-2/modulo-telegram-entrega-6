@@ -1,10 +1,7 @@
 package ar.edu.utn.dds.k3003.app;
 
 import ar.edu.utn.dds.k3003.clients.*;
-import ar.edu.utn.dds.k3003.facades.dtos.Constants;
-import ar.edu.utn.dds.k3003.facades.dtos.EstadoTrasladoEnum;
-import ar.edu.utn.dds.k3003.facades.dtos.RutaDTO;
-import ar.edu.utn.dds.k3003.facades.dtos.TrasladoDTO;
+import ar.edu.utn.dds.k3003.facades.dtos.*;
 import ar.edu.utn.dds.k3003.facades.exceptions.TrasladoNoAsignableException;
 import ar.edu.utn.dds.k3003.model.dtos.ColaboradorDTO;
 import ar.edu.utn.dds.k3003.model.dtos.FormasDeColaborarDTO;
@@ -349,10 +346,36 @@ public class WebApp extends TelegramLongPollingBot {
                     break;
                 }
                 // Modulo Viandas
-                case "/nueva_vianda": {
+                case "/nueva_vianda": { //{id} {CodigoQR} {fechaelab???} {estado} {Colaborarid} {heladeraID}
+                    if(comando.length != 7) {
+                        SendMessage msg = new SendMessage();
+                        msg.setChatId(chat_id);
+                        msg.setText("Comando incorrecto. Por favor, utilice /iniciar para ver los comandos disponibles.");
+                        try {
+                           execute(msg);
+                        } catch (TelegramApiException e) {
+                           throw new RuntimeException(e);
+                        }
+                        break;
+                    }
+                    var id = Integer.parseInt(comando[1]);
+                    var codigoQR = String.valueOf(comando[2]);
+                    var fechaElaboracion = Integer.parseInt(comando[3]); //como es el tema de la fechaaaaaaa
+                    var estado = EstadoViandaEnum.valueOf(comando[4]);
+                    var colaboradorid = Integer.parseInt(comando[5]);
+                    var heladeraid = Integer.parseInt(comando[6]);
+
+                    //fachadaViandas.agregar(id, codigoQR, fechaElaboracion, estado, colaboradorid, heladeraid);
+
                     SendMessage msg = new SendMessage();
                     msg.setChatId(chat_id);
-                    msg.setText("Comando no implementado");
+                    msg.setText("Vianda creada correctamente" +
+                            "\nId: " + id +
+                            "\nCodigo QR: " + codigoQR +
+                            "\nFecha Elaboracion: " + fechaElaboracion +
+                            "\nEstado: " + estado +
+                            "\ncolaboradorId: " + colaboradorid +
+                            "\nHeladeraId: " + heladeraid);
                     try {
                         execute(msg);
                     } catch (TelegramApiException e) {
@@ -360,6 +383,7 @@ public class WebApp extends TelegramLongPollingBot {
                     }
                     break;
                 }
+
                 case "/depositar_vianda": {
                     SendMessage msg = new SendMessage();
                     msg.setChatId(chat_id);
