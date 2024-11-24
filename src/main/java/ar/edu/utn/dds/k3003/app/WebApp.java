@@ -348,6 +348,7 @@ public class WebApp extends TelegramLongPollingBot {
         var objectMapper = createObjectMapper();
         fachadaColaboradores = new ColaboradoresProxy(objectMapper);
         fachadaIncidentes = new IncidentesProxy(objectMapper);
+        fachadaLogistica = new LogisticaProxy(objectMapper);
 
         final var registry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
         registry.config().commonTags("app", "metrics-sample");
