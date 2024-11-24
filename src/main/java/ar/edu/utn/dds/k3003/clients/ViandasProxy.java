@@ -68,14 +68,6 @@ public class ViandasProxy implements FachadaViandas {
         }
         throw new RuntimeException("Error conectandose con el componente viandas");
 
-        /*
-        if(!qr.equals("unQRQueExiste")){
-            throw new NoSuchElementException("No se encontro la vianda " + qr);
-        }
-
-        return new ViandaDTO("unQRQueExiste", LocalDateTime.now(), EstadoViandaEnum.PREPARADA,1L,1);
-         */
-
     }
 
     @Override
