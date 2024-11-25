@@ -294,7 +294,7 @@ public class WebApp extends TelegramLongPollingBot {
                     break;
                 }
                 // Modulo Incidentes
-                case "/reportar_falla_tecnica": {
+                case "/reportar_falla_tecnica": { //{heladeraId}
                     if (comando.length != 2) {
                         SendMessage errorMsg = new SendMessage();
                         errorMsg.setChatId(chat_id);
@@ -313,7 +313,7 @@ public class WebApp extends TelegramLongPollingBot {
 
                     SendMessage msg = new SendMessage();
                     msg.setChatId(chat_id);
-                    msg.setText("Incidente de Falla Tencina creado correctamente");
+                    msg.setText("Incidente de Falla Tecnica creado correctamente");
                     try {
                         execute(msg);
                     } catch (TelegramApiException e) {
