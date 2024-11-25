@@ -294,10 +294,26 @@ public class WebApp extends TelegramLongPollingBot {
                     break;
                 }
                 // Modulo Incidentes
-                case "/reportar_incidente": {
+                case "/reportar_falla_tecnica": {
+                    if (comando.length != 2) {
+                        SendMessage errorMsg = new SendMessage();
+                        errorMsg.setChatId(chat_id);
+                        errorMsg.setText("Uso incorrecto. Formato: /reportar_falla_tecnica {heladeraId}");
+                        try {
+                            execute(errorMsg);
+                        } catch (TelegramApiException e) {
+                            throw new RuntimeException(e);
+                        }
+                        break;
+                    }
+
+                    var heladeraId = Long.parseLong(comando[1]);
+
+                    fachadaIncidentes.crearIncidente(heladeraId);
+
                     SendMessage msg = new SendMessage();
                     msg.setChatId(chat_id);
-                    msg.setText("Comando no implementado");
+                    msg.setText("Incidente de Falla Tencina creado correctamente");
                     try {
                         execute(msg);
                     } catch (TelegramApiException e) {
@@ -305,6 +321,7 @@ public class WebApp extends TelegramLongPollingBot {
                     }
                     break;
                 }
+
                 case "/resolver_incidente": { // {incidenteId}
 
                     if(comando.length != 2) {

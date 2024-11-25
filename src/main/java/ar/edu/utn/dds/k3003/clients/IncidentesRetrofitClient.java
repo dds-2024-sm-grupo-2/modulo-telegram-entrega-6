@@ -8,6 +8,10 @@ import retrofit2.Call;
 import retrofit2.http.*;
 
 public interface IncidentesRetrofitClient {
+
+    @POST("incidentes")
+    Call<Void> crearIncidente(@Body IncidenteDTO incidenteDTO);
+
     @POST("incidentes/{incidenteId}")
     Call<Void> resolver_incidente(@Path("incidenteId") Long incidenteId, @Body IncidenteDTO incidenteDTO);
 
