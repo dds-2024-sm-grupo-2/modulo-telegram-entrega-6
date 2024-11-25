@@ -69,31 +69,67 @@ public class WebApp extends TelegramLongPollingBot {
 //                            "/nueva_vianda {CodigoQR} {fechaelab} {estado} {Colaborarid} {heladeraID}" +
 //                            "/resolver_incidente {idIncidente} \n");
                     msg.setText("""
-                                *BIENVENIDO AL CHATBOT DEL TP DE DISEÑO - 2024*  
-                                Para continuar, utiliza alguno de los siguientes comandos:
-                                
-                                📋 *Comandos Disponibles:*
-                                1️⃣ `/datos_colaborador {colaboradorId}`  
-                                   _Muestra los datos de un colaborador._
-                                
-                                2️⃣ `/cambiar_formas_colaborar {colaboradorId} {[formas]}`  
-                                   _Actualiza las formas en las que un colaborador puede participar._
-                                
-                                3️⃣ `/nueva_ruta {colaboradorId} {heladeraIdOrigen} {heladeraIdDestino}`  
-                                   _Crea una nueva ruta entre dos heladeras._
-                                
-                                4️⃣ `/asignar_traslado {qrVianda} {heladeraIdOrigen} {heladeraIdDestino}`  
-                                   _Asigna un traslado de una vianda._
-                                
-                                5️⃣ `/modificar_traslado {idTraslado} {estadoTraslado}`  
-                                   _Modifica el estado de un traslado._
-                                
-                                6️⃣ `/nueva_vianda {CodigoQR} {fechaelab} {estado} {Colaborarid} {heladeraID}`  
-                                   _Crea una nueva vianda._
-                                
-                                7️⃣ `/resolver_incidente {idIncidente}`  
-                                   _Resuelve un incidente reportado._
-                                """);
+                        *BIENVENIDO AL CHATBOT DEL TP DE DISEÑO - 2024*  
+                        Para continuar, utiliza alguno de los siguientes comandos:
+                        
+                        📋 *Comandos Disponibles:*
+                        
+                        🔹 *Colaboradores:*  
+                        1️⃣ `/datos_colaborador {colaboradorId}`  
+                           _Muestra los datos de un colaborador._
+                           
+                        2️⃣ `/cambiar_formas_colaborar {colaboradorId} {[formas]}`  
+                           _Cambia las formas en que un colaborador puede participar._
+                        
+                        🔹 *Logística:*  
+                        3️⃣ `/nueva_ruta {colaboradorId} {heladeraIdOrigen} {heladeraIdDestino}`  
+                           _Crea una nueva ruta entre dos heladeras._
+                        
+                        4️⃣ `/asignar_traslado {qrVianda} {heladeraIdOrigen} {heladeraIdDestino}`  
+                           _Asigna un traslado de una vianda._
+                        
+                        5️⃣ `/modificar_traslado {idTraslado} {estadoTraslado}`  
+                           _Modifica el estado de un traslado._
+                        
+                        🔹 *Incidentes:*  
+                        6️⃣ `/reportar_incidente`  
+                           _No implementado todavía._
+                        
+                        7️⃣ `/resolver_incidente {idIncidente}`  
+                           _Resuelve un incidente reportado._
+                        
+                        8️⃣ `/listar_incidentes_heladera`  
+                           _No implementado todavía._
+                        
+                        🔹 *Heladeras:*  
+                        9️⃣ `/listar_heladeras_zona`  
+                           _No implementado todavía._
+                        
+                        🔟 `/listar_disponibilidad_heladera`  
+                           _No implementado todavía._
+                        
+                        1️⃣1️⃣ `/listar_retiros_diarios_heladera`  
+                           _No implementado todavía._
+                        
+                        1️⃣2️⃣ `/subscribirse_heladera`  
+                           _No implementado todavía._
+                        
+                        1️⃣3️⃣ `/desubscribirse_heladera`  
+                           _No implementado todavía._
+                        
+                        1️⃣4️⃣ `/subscribirse_evento_heladera`  
+                           _No implementado todavía._
+                        
+                        🔹 *Viandas:*  
+                        1️⃣5️⃣ `/nueva_vianda {CodigoQR} {fechaelab} {estado} {Colaborarid} {heladeraID}`  
+                           _Crea una nueva vianda._
+                        
+                        1️⃣6️⃣ `/depositar_vianda`  
+                           _No implementado todavía._
+                        
+                        1️⃣7️⃣ `/retirar_vianda`  
+                           _No implementado todavía._
+                        """);
                     msg.enableMarkdown(true); // Activa el formato Markdown
                     try {
                         execute(msg);
@@ -376,7 +412,7 @@ public class WebApp extends TelegramLongPollingBot {
                     break;
                 }
                 // Modulo Viandas
-                case "/nueva_vianda": { //{CodigoQR} {fechaelab???} {estado} {Colaborarid} {heladeraID}
+                case "/nueva_vianda": { //{CodigoQR} {fechaelab} {estado} {Colaborarid} {heladeraID}
                     if(comando.length != 6) {
                         SendMessage msg = new SendMessage();
                         msg.setChatId(chat_id);
@@ -389,7 +425,7 @@ public class WebApp extends TelegramLongPollingBot {
                         break;
                     }
                     var codigoQR = String.valueOf(comando[1]);
-                    var fechaElaboracion = LocalDateTime.parse(comando[2]); // Convertir la fecha a ZonedDateTime CHEQUEAR ESTOOOOOOO
+                    var fechaElaboracion = LocalDateTime.parse(comando[2]);
                     var estado = EstadoViandaEnum.valueOf(comando[3]);
                     var colaboradorid = Long.parseLong(comando[4]);
                     var heladeraid = Integer.parseInt(comando[5]);
