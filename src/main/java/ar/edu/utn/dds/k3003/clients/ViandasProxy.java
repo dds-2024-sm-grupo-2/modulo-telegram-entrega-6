@@ -34,7 +34,7 @@ public class ViandasProxy implements FachadaViandas {
     public ViandaDTO agregar(ViandaDTO viandaDTO) {
         return null;
     }
-//CHEQUEAR
+
     public void agregar(String codigoQR, LocalDateTime fechaElaboracion, EstadoViandaEnum estado, Long colaboradorId, Integer heladeraId) {
         try {
             Response<Void> response = service.agregar(new ViandaDTO(codigoQR, fechaElaboracion, estado, colaboradorId, heladeraId)).execute();

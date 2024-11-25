@@ -349,7 +349,7 @@ public class WebApp extends TelegramLongPollingBot {
                 }
                 // Modulo Viandas
                 case "/nueva_vianda": { //{CodigoQR} {fechaelab???} {estado} {Colaborarid} {heladeraID}
-                    if(comando.length != 7) {
+                    if(comando.length != 6) {
                         SendMessage msg = new SendMessage();
                         msg.setChatId(chat_id);
                         msg.setText("Comando incorrecto. Por favor, utilice /iniciar para ver los comandos disponibles.");
