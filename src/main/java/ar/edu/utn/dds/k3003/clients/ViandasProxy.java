@@ -30,17 +30,11 @@ public class ViandasProxy implements FachadaViandas {
         this.service = retrofit.create(ViandasRetrofitClient.class);
     }
 
-//    @Override
-//    public ViandaDTO agregar(ViandaDTO viandaDTO) {
-//        return null;
-//    }
-//
     @Override
     public ViandaDTO agregar(ViandaDTO viandaDTO) {
         agregar(viandaDTO.getCodigoQR(), viandaDTO.getFechaElaboracion(), viandaDTO.getEstado(), viandaDTO.getColaboradorId(), viandaDTO.getHeladeraId());
         return viandaDTO;
     }
-
     public void agregar(String codigoQR, LocalDateTime fechaElaboracion, EstadoViandaEnum estado, Long colaboradorId, Integer heladeraId) {
         try {
             Response<Void> response = service.agregar(new ViandaDTO(codigoQR, fechaElaboracion, estado, colaboradorId, heladeraId)).execute();
