@@ -92,8 +92,8 @@ public class WebApp extends TelegramLongPollingBot {
                            _Modifica el estado de un traslado._
                         
                         🔹 *Incidentes:*  
-                        6️⃣ `/reportar_incidente`  
-                           _No implementado todavía._
+                        6️⃣ `/reportar_falla_tecnica {heladeraId}`  
+                           _Crea un incidente de Falla Tecnica._
                         
                         7️⃣ `/resolver_incidente {idIncidente}`  
                            _Resuelve un incidente reportado._
