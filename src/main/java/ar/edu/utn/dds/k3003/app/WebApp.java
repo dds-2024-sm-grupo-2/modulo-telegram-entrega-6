@@ -59,14 +59,42 @@ public class WebApp extends TelegramLongPollingBot {
                 case "/iniciar": {
                     SendMessage msg = new SendMessage();
                     msg.setChatId(chat_id);
-                    msg.setText("BIENVENIDO AL CHATBOT DEL TP DE DISEÑO - 2024\n " +
-                            "PARA CONTINUAR, UTILIZA ALGUNO DE LOS SIGUIENTES COMANDOS: \n" +
-                            "/datos_colaborador {colaboradorId} \n" +
-                            "/cambiar_formas_colaborar {colaboradorId} {[formas]} \n" +
-                            "/nueva_ruta {colaboradorId} {heladeraIdOrigen} {heladeraIdDestino} \n" +
-                            "/asignar_traslado {qrVianda} {heladeraIdOrigen} {heladeraIdDestino} \n" +
-                            "/modificar_traslado {idTraslado} {estadoTraslado} \n" +
-                            "/resolver_incidente {idIncidente} \n");
+//                    msg.setText("BIENVENIDO AL CHATBOT DEL TP DE DISEÑO - 2024\n " +
+//                            "PARA CONTINUAR, UTILIZA ALGUNO DE LOS SIGUIENTES COMANDOS: \n" +
+//                            "/datos_colaborador {colaboradorId} \n" +
+//                            "/cambiar_formas_colaborar {colaboradorId} {[formas]} \n" +
+//                            "/nueva_ruta {colaboradorId} {heladeraIdOrigen} {heladeraIdDestino} \n" +
+//                            "/asignar_traslado {qrVianda} {heladeraIdOrigen} {heladeraIdDestino} \n" +
+//                            "/modificar_traslado {idTraslado} {estadoTraslado} \n" +
+//                            "/nueva_vianda {CodigoQR} {fechaelab} {estado} {Colaborarid} {heladeraID}" +
+//                            "/resolver_incidente {idIncidente} \n");
+                    msg.setText("""
+                                *BIENVENIDO AL CHATBOT DEL TP DE DISEÑO - 2024*  
+                                Para continuar, utiliza alguno de los siguientes comandos:
+                                
+                                📋 *Comandos Disponibles:*
+                                1️⃣ `/datos_colaborador {colaboradorId}`  
+                                   _Muestra los datos de un colaborador._
+                                
+                                2️⃣ `/cambiar_formas_colaborar {colaboradorId} {[formas]}`  
+                                   _Actualiza las formas en las que un colaborador puede participar._
+                                
+                                3️⃣ `/nueva_ruta {colaboradorId} {heladeraIdOrigen} {heladeraIdDestino}`  
+                                   _Crea una nueva ruta entre dos heladeras._
+                                
+                                4️⃣ `/asignar_traslado {qrVianda} {heladeraIdOrigen} {heladeraIdDestino}`  
+                                   _Asigna un traslado de una vianda._
+                                
+                                5️⃣ `/modificar_traslado {idTraslado} {estadoTraslado}`  
+                                   _Modifica el estado de un traslado._
+                                
+                                6️⃣ `/nueva_vianda {CodigoQR} {fechaelab} {estado} {Colaborarid} {heladeraID}`  
+                                   _Crea una nueva vianda._
+                                
+                                7️⃣ `/resolver_incidente {idIncidente}`  
+                                   _Resuelve un incidente reportado._
+                                """);
+                    msg.enableMarkdown(true); // Activa el formato Markdown
                     try {
                         execute(msg);
                     } catch (TelegramApiException e) {
