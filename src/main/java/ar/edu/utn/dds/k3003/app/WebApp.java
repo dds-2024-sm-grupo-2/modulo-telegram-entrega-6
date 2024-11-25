@@ -59,15 +59,6 @@ public class WebApp extends TelegramLongPollingBot {
                 case "/iniciar": {
                     SendMessage msg = new SendMessage();
                     msg.setChatId(chat_id);
-//                    msg.setText("BIENVENIDO AL CHATBOT DEL TP DE DISEÑO - 2024\n " +
-//                            "PARA CONTINUAR, UTILIZA ALGUNO DE LOS SIGUIENTES COMANDOS: \n" +
-//                            "/datos_colaborador {colaboradorId} \n" +
-//                            "/cambiar_formas_colaborar {colaboradorId} {[formas]} \n" +
-//                            "/nueva_ruta {colaboradorId} {heladeraIdOrigen} {heladeraIdDestino} \n" +
-//                            "/asignar_traslado {qrVianda} {heladeraIdOrigen} {heladeraIdDestino} \n" +
-//                            "/modificar_traslado {idTraslado} {estadoTraslado} \n" +
-//                            "/nueva_vianda {CodigoQR} {fechaelab} {estado} {Colaborarid} {heladeraID}" +
-//                            "/resolver_incidente {idIncidente} \n");
                     msg.setText("""
                         *BIENVENIDO AL CHATBOT DEL TP DE DISEÑO - 2024*  
                         Para continuar, utiliza alguno de los siguientes comandos:
