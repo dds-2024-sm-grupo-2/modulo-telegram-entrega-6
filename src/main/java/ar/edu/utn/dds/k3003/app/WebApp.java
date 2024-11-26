@@ -502,11 +502,12 @@ public class WebApp extends TelegramLongPollingBot {
                     var tarjeta = String.valueOf(comando[2]);
                     var heladeraId = Integer.parseInt(comando[3]);
 
-                    fachadaHeladeras.retirar(qrVianda, tarjeta, heladeraId);
+                    RetiroDTO retiroDTO = new RetiroDTO(qrVianda, tarjeta, heladeraId);
+                    fachadaHeladeras.retirar(retiroDTO);
 
                     SendMessage msg = new SendMessage();
                     msg.setChatId(chat_id);
-                    msg.setText("Vianda depositada correctamente.");
+                    msg.setText("Vianda retirada correctamente.");
                     try {
                         execute(msg);
                     } catch (TelegramApiException e) {

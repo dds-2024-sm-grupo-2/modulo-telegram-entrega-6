@@ -68,8 +68,16 @@ public class HeladerasProxy implements FachadaHeladeras {
         return 0;
     }
 
-    @Override
-    public void retirar(RetiroDTO retiroDTO) throws NoSuchElementException {
+
+    public void retirar(RetiroDTO retiroDTO) {
+        try {
+            Response<Void> response = service.retirar(retiroDTO).execute();
+            if (!response.isSuccessful()) {
+                throw new RuntimeException("Error al retirar la vianda: " + response.errorBody().string());
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Error de comunicación al retirar la vianda: ", e);
+        }
     }
 
     @Override

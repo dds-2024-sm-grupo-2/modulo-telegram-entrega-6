@@ -11,6 +11,9 @@ public interface HeladerasRetrofitClient {
     @FormUrlEncoded
     Call<Void> depositar(@Field("heladeraId") Integer heladeraId, @Field("viandaQR") String viandaQR); //revisar esto
 
+    @POST("retiros")
+    Call<Void> retirar(@Body RetiroDTO retiroDTO);
+
     @POST("cambiarEstadoActivo/{idHeladera}")
     Call<Void> modificarEstadoHeladera(@Path("idHeladera") Integer id);
 }
