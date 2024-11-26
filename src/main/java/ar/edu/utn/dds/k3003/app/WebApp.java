@@ -116,10 +116,10 @@ public class WebApp extends TelegramLongPollingBot {
                            _Crea una nueva vianda._
                         
                         1️⃣6️⃣ `/depositar_vianda`  
-                           _No implementado todavía._
+                           _Depositar una vianda en una heladera._
                         
                         1️⃣7️⃣ `/retirar_vianda`  
-                           _No implementado todavía._
+                           _Retirar una vianda de una heladera._
                         """);
                     msg.enableMarkdown(true); // Activa el formato Markdown
                     try {
