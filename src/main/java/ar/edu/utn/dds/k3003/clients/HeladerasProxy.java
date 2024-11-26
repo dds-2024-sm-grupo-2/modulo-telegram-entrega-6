@@ -51,7 +51,7 @@ public class HeladerasProxy implements FachadaHeladeras {
         return null;
     }
 
-    @Override
+
     public void depositar(Integer heladeraId, String qrVianda) {
         try {
             Response<Void> response = service.depositar(heladeraId, qrVianda).execute();
@@ -63,12 +63,6 @@ public class HeladerasProxy implements FachadaHeladeras {
         }
     }
 
-    @Override
-    public Integer cantidadViandas(Integer integer) throws NoSuchElementException {
-        return 0;
-    }
-
-
     public void retirar(RetiroDTO retiroDTO) {
         try {
             Response<Void> response = service.retirar(retiroDTO).execute();
@@ -78,6 +72,11 @@ public class HeladerasProxy implements FachadaHeladeras {
         } catch (IOException e) {
             throw new RuntimeException("Error de comunicación al retirar la vianda: ", e);
         }
+    }
+
+    @Override
+    public Integer cantidadViandas(Integer integer) throws NoSuchElementException {
+        return 0;
     }
 
     @Override
