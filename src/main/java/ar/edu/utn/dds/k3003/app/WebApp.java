@@ -456,10 +456,27 @@ public class WebApp extends TelegramLongPollingBot {
                     break;
                 }
 
-                case "/depositar_vianda": {
+                case "/depositar_vianda": { //{heladeraId, ViandaQR}
+                    if(comando.length != 3) {
+                        SendMessage msg = new SendMessage();
+                        msg.setChatId(chat_id);
+                        msg.setText("Comando incorrecto. Por favor, utilice /iniciar para ver los comandos disponibles.");
+                        try {
+                            execute(msg);
+                        } catch (TelegramApiException e) {
+                            throw new RuntimeException(e);
+                        }
+                        break;
+                    }
+
+                    var heladeraId = Integer.parseInt(comando[1]);
+                    var qrVianda = String.valueOf(comando[2]);
+
+                    fachadaHeladeras.depositar(heladeraId, qrVianda);
+
                     SendMessage msg = new SendMessage();
                     msg.setChatId(chat_id);
-                    msg.setText("Comando no implementado");
+                    msg.setText("Vianda depositada correctamente.");
                     try {
                         execute(msg);
                     } catch (TelegramApiException e) {
@@ -467,10 +484,29 @@ public class WebApp extends TelegramLongPollingBot {
                     }
                     break;
                 }
-                case "/retirar_vianda": {
+
+                case "/retirar_vianda": { //{ViandaQR, Tarjeta, HeladeraId}
+                    if(comando.length != 4) {
+                        SendMessage msg = new SendMessage();
+                        msg.setChatId(chat_id);
+                        msg.setText("Comando incorrecto. Por favor, utilice /iniciar para ver los comandos disponibles.");
+                        try {
+                            execute(msg);
+                        } catch (TelegramApiException e) {
+                            throw new RuntimeException(e);
+                        }
+                        break;
+                    }
+
+                    var qrVianda = String.valueOf(comando[1]);
+                    var tarjeta = String.valueOf(comando[2]);
+                    var heladeraId = Integer.parseInt(comando[3]);
+
+                    fachadaHeladeras.retirar(qrVianda, tarjeta, heladeraId);
+
                     SendMessage msg = new SendMessage();
                     msg.setChatId(chat_id);
-                    msg.setText("Comando no implementado");
+                    msg.setText("Vianda depositada correctamente.");
                     try {
                         execute(msg);
                     } catch (TelegramApiException e) {

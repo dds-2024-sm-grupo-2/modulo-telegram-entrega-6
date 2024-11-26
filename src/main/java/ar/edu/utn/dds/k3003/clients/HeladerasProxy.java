@@ -52,8 +52,15 @@ public class HeladerasProxy implements FachadaHeladeras {
     }
 
     @Override
-    public void depositar(Integer integer, String s) throws NoSuchElementException {
-
+    public void depositar(Integer heladeraId, String qrVianda) {
+        try {
+            Response<Void> response = service.depositar(heladeraId, qrVianda).execute();
+            if (!response.isSuccessful()) {
+                throw new RuntimeException("No se pudo depositar la vianda: " + response.errorBody().string());
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Error al depositar la vianda: ", e);
+        }
     }
 
     @Override
