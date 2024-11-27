@@ -471,7 +471,7 @@ public class WebApp extends TelegramLongPollingBot {
                         break;
                     }
 
-                    var heladeraId = Integer.parseInt(comando[1]);
+                    var heladeraId = Integer.valueOf(comando[1]);
                     var qrVianda = String.valueOf(comando[2]);
                     System.out.println(heladeraId);
                     System.out.println(qrVianda);
