@@ -93,4 +93,18 @@ public class HeladerasProxy implements FachadaHeladeras {
     public void setViandasProxy(FachadaViandas fachadaViandas) {
 
     }
+    public List<HeladeraDTO> getHeladeras() {
+        Response<List<HeladeraDTO>> response;
+        try {
+            response = service.getHeladeras().execute();
+            if (!response.isSuccessful()) {
+                throw new RuntimeException("No se pudo obtener las heladeras");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Error al depositar la vianda: ", e);
+        }
+
+        return response.body();
+    }
+
 }

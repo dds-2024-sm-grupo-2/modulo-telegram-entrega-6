@@ -356,7 +356,8 @@ public class WebApp extends TelegramLongPollingBot {
                 case "/listar_heladeras_zona": {
                     SendMessage msg = new SendMessage();
                     msg.setChatId(chat_id);
-                    msg.setText("Comando no implementado");
+                    List <HeladeraDTO> lista = fachadaHeladeras.getHeladeras();
+                    msg.setText(lista.toString());
                     try {
                         execute(msg);
                     } catch (TelegramApiException e) {
