@@ -95,6 +95,7 @@ public class WebApp extends TelegramLongPollingBot {
                         🔹 *Heladeras:*  
                         9️⃣ `/listar_heladeras_zona`
                             _Devuelve una lista de heladeras_
+                           
                         🔟 `/listar_disponibilidad_heladera`  
                            _No implementado todavía._
                         
