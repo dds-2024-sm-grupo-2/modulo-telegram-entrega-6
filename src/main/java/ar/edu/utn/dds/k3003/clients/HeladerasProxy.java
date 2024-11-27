@@ -53,9 +53,8 @@ public class HeladerasProxy implements FachadaHeladeras {
     }
 
 
-    public void depositar(Integer heladeraId, String qrVianda) {
+    public void depositar(ViandaRequest viandaRequest) {
 
-        ViandaRequest viandaRequest = new ViandaRequest(heladeraId, qrVianda);
         try {
             Response<Void> response = service.depositar(viandaRequest).execute();
             if (!response.isSuccessful()) {
