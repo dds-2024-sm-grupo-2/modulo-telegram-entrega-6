@@ -21,7 +21,6 @@
 - `/listar_retiros_diarios_heladera`: Lista los retiros diarios de una heladera.
 - `/subscribirse_heladera`: Permite suscribirse a una heladera para recibir notificaciones.
 - `/desubscribirse_heladera`: Permite desuscribirse de una heladera.
-- `/subscribirse_evento_heladera`: Permite suscribirse a eventos relacionados con una heladera.
 
 #### Modulo Incidentes
 - `/reportar_incidente`: Reporta un nuevo incidente.
