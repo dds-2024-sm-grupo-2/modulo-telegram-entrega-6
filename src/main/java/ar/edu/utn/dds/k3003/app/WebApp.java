@@ -473,9 +473,11 @@ public class WebApp extends TelegramLongPollingBot {
 
                     var heladeraId = Integer.parseInt(comando[1]);
                     var qrVianda = String.valueOf(comando[2]);
+                    System.out.println(heladeraId);
+                    System.out.println(qrVianda);
 
                     ViandaRequest viandaRequest = new ViandaRequest(heladeraId, qrVianda);
-                    fachadaHeladeras.depositar(viandaRequest);
+                    fachadaHeladeras.depositar2(viandaRequest);
 
                     SendMessage msg = new SendMessage();
                     msg.setChatId(chat_id);
