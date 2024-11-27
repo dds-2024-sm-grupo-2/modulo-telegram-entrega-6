@@ -342,6 +342,8 @@ public class WebApp extends TelegramLongPollingBot {
                     break;
                 }
                 case "/listar_incidentes_heladera": {
+
+
                     SendMessage msg = new SendMessage();
                     msg.setChatId(chat_id);
                     msg.setText("Comando no implementado");
@@ -366,10 +368,12 @@ public class WebApp extends TelegramLongPollingBot {
                     break;
                 }
                 case "/listar_disponibilidad_heladera": {
+                    var idHeladera = Integer.parseInt((comando[1]));
                     SendMessage msg = new SendMessage();
+                    Integer cantViandas= fachadaHeladeras.getViandasDeHeladera(idHeladera);
                     msg.setChatId(chat_id);
-                    msg.setText("Comando no implementado");
-                    try {
+                    msg.setText("La cantidad de viandas de la heladera: "+ idHeladera + " es : " + cantViandas);
+                   try{
                         execute(msg);
                     } catch (TelegramApiException e) {
                         throw new RuntimeException(e);
