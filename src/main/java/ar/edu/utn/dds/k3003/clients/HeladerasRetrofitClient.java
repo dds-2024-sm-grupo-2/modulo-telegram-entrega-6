@@ -3,6 +3,7 @@ package ar.edu.utn.dds.k3003.clients;
 import ar.edu.utn.dds.k3003.facades.dtos.EstadoViandaEnum;
 import ar.edu.utn.dds.k3003.facades.dtos.HeladeraDTO;
 import ar.edu.utn.dds.k3003.facades.dtos.RetiroDTO;
+import ar.edu.utn.dds.k3003.model.dtos.ViandaRequest;
 import retrofit2.Call;
 import retrofit2.http.*;
 
@@ -11,8 +12,7 @@ import java.util.List;
 public interface HeladerasRetrofitClient {
 
     @POST("depositos")
-    @FormUrlEncoded
-    Call<Void> depositar(@Field("heladeraId") Integer heladeraId, @Field("viandaQR") String viandaQR); //revisar esto
+    Call<Void> depositar(@Body ViandaRequest viandaRequest); //revisar esto
 
     @POST("retiros")
     Call<Void> retirar(@Body RetiroDTO retiroDTO);

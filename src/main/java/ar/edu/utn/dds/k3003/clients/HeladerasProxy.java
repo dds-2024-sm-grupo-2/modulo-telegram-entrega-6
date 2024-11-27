@@ -4,6 +4,7 @@ import ar.edu.utn.dds.k3003.facades.FachadaHeladeras;
 import ar.edu.utn.dds.k3003.facades.FachadaViandas;
 import ar.edu.utn.dds.k3003.facades.dtos.*;
 import ar.edu.utn.dds.k3003.model.dtos.IncidenteDTO;
+import ar.edu.utn.dds.k3003.model.dtos.ViandaRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
@@ -53,8 +54,10 @@ public class HeladerasProxy implements FachadaHeladeras {
 
 
     public void depositar(Integer heladeraId, String qrVianda) {
+
+        ViandaRequest viandaRequest = new ViandaRequest(heladeraId, qrVianda);
         try {
-            Response<Void> response = service.depositar(heladeraId, qrVianda).execute();
+            Response<Void> response = service.depositar(viandaRequest).execute();
             if (!response.isSuccessful()) {
                 throw new RuntimeException("No se pudo depositar la vianda: " + response.errorBody().string());
             }
