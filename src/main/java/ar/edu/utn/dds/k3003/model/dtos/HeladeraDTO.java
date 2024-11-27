@@ -12,16 +12,16 @@ public class HeladeraDTO {
     private Integer tempMax;
     private Integer tempMin;
 
-    public HeladeraDTO2(String nombre, Integer cantidadTotalDeViandas) {
+    public HeladeraDTO(String nombre, Integer cantidadTotalDeViandas) {
         this.nombre=nombre;
         this.cantidadTotalDeViandas = cantidadTotalDeViandas;
     }
-    public HeladeraDTO2(String nombre, Integer cantidadTotalDeViandas, Integer ntiempo, Integer tempMax, Integer tempMin) {
+    public HeladeraDTO(String nombre, Integer cantidadTotalDeViandas, Integer ntiempo, Integer tempMax, Integer tempMin) {
         this.nombre=nombre;
         this.cantidadTotalDeViandas = cantidadTotalDeViandas;
         this.ntiempo = ntiempo;
         this.tempMax = tempMax;
         this.tempMin = tempMin;
     }
-    public HeladeraDTO2(){}
+    public HeladeraDTO(){}
 }
