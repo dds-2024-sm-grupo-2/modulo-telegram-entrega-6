@@ -5,6 +5,7 @@ import ar.edu.utn.dds.k3003.facades.dtos.*;
 import ar.edu.utn.dds.k3003.facades.exceptions.TrasladoNoAsignableException;
 import ar.edu.utn.dds.k3003.model.dtos.ColaboradorDTO;
 import ar.edu.utn.dds.k3003.model.dtos.FormasDeColaborarDTO;
+import ar.edu.utn.dds.k3003.model.dtos.ViandaRequest;
 import ar.edu.utn.dds.k3003.model.enums.MisFormasDeColaborar;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -478,7 +479,9 @@ public class WebApp extends TelegramLongPollingBot {
                     var qrVianda = String.valueOf(comando[2]);
                     System.out.println(heladeraId);
                     System.out.println(qrVianda);
-                    fachadaHeladeras.depositar(heladeraId, qrVianda);
+
+                    ViandaRequest viandaRequest = new ViandaRequest(heladeraId, qrVianda);
+                    fachadaHeladeras.depositar2(viandaRequest);
 
                     SendMessage msg = new SendMessage();
                     msg.setChatId(chat_id);

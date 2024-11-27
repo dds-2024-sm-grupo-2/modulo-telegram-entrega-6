@@ -12,7 +12,7 @@ import java.util.List;
 public interface HeladerasRetrofitClient {
 
     @POST("depositos")
-    Call<Void> depositar(@Body ViandaRequest viandaRequest); //revisar esto
+    Call<Void> depositar2(@Body ViandaRequest viandaRequest); //revisar esto
 
     @POST("retiros")
     Call<Void> retirar(@Body RetiroDTO retiroDTO);
