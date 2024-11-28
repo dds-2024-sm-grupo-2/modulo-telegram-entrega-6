@@ -6,6 +6,8 @@ import ar.edu.utn.dds.k3003.facades.dtos.HeladeraDTO;
 import ar.edu.utn.dds.k3003.facades.exceptions.TrasladoNoAsignableException;
 import ar.edu.utn.dds.k3003.model.dtos.*;
 import ar.edu.utn.dds.k3003.model.dtos.ColaboradorDTO;
+import ar.edu.utn.dds.k3003.model.dtos.FormasDeColaborarDTO;
+import ar.edu.utn.dds.k3003.model.dtos.ViandaRequest;
 import ar.edu.utn.dds.k3003.model.enums.MisFormasDeColaborar;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
