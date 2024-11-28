@@ -98,10 +98,9 @@ public class WebApp extends TelegramLongPollingBot {
                             _Devuelve una lista de heladeras_
                            
                         🔟 `/listar_disponibilidad_heladera`  
-                           _No implementado todavía._
-                        
+                            -Devuelve la disponibilidad de la heladera-                        
                         1️⃣1️⃣ `/listar_retiros_diarios_heladera`  
-                           _No implementado todavía._
+                            - Devuelve los retiros diarios de la heladera-
                         
                         1️⃣2️⃣ `/subscribirse_heladera`  
                            _No implementado todavía._
@@ -383,8 +382,10 @@ public class WebApp extends TelegramLongPollingBot {
                 }
                 case "/listar_retiros_diarios_heladera": {
                     SendMessage msg = new SendMessage();
+                    var idHeladera = Integer.parseInt((comando[1]));
+                    List <RetiroDTO> retirosDelDia = fachadaHeladeras.getRetirosDelDia(idHeladera);
                     msg.setChatId(chat_id);
-                    msg.setText("Comando no implementado");
+                    msg.setText(retirosDelDia.toString());
                     try {
                         execute(msg);
                     } catch (TelegramApiException e) {
