@@ -106,7 +106,7 @@ public class WebApp extends TelegramLongPollingBot {
                         1️⃣2️⃣ `/subscribirse_heladera`  
                            _.Para suscribirse al evento de  viandas disponibles de una heladera: viandasDisponibles {idColab} {idHeladera} {nviandasdisponibles}._
                             _.Para suscribirse al evento de viandas faltantes de una heladera: viandasFaltantes {idColab} {idHeladera} {nviandasfaltantes}._
-                            _.Para suscribirse al evento de desperfecto de una heladera: heladeraDesperfecto {
+                            _.Para suscribirse al evento de desperfecto de una heladera: heladeraDesperfecto {idColab} {idHeladera}
                         
                         1️⃣3️⃣ `/desubscribirse_heladera`  
                            _No implementado todavía._
