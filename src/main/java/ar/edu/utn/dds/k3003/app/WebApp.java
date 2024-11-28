@@ -100,7 +100,7 @@ public class WebApp extends TelegramLongPollingBot {
                             _Devuelve una lista de heladeras_
                            
                         🔟 `/listar_disponibilidad_heladera`  
-                            -Devuelve la disponibilidad de la heladera-     
+                            -Devuelve la disponibilidad de la heladera_    
                                                
                         1️⃣1️⃣ `/listar_retiros_diarios_heladera`  
                             - Devuelve los retiros diarios de la heladera-
@@ -108,7 +108,7 @@ public class WebApp extends TelegramLongPollingBot {
                         1️⃣2️⃣ `/subscribirse_heladera`  
                            _.Para suscribirse al evento de  viandas disponibles de una heladera: viandasDisponibles {idColab} {idHeladera} {nviandasdisponibles}._
                             _.Para suscribirse al evento de viandas faltantes de una heladera: viandasFaltantes {idColab} {idHeladera} {nviandasfaltantes}._
-                            _.Para suscribirse al evento de desperfecto de una heladera: heladeraDesperfecto {idColab} {idHeladera}
+                            _.Para suscribirse al evento de desperfecto de una heladera: heladeraDesperfecto {idColab} {idHeladera}._
                         
                         1️⃣3️⃣ `/desubscribirse_heladera`  
                            _No implementado todavía._
