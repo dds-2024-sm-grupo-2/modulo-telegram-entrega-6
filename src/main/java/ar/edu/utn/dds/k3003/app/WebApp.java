@@ -6,6 +6,8 @@ import ar.edu.utn.dds.k3003.facades.dtos.HeladeraDTO;
 import ar.edu.utn.dds.k3003.facades.exceptions.TrasladoNoAsignableException;
 import ar.edu.utn.dds.k3003.model.dtos.*;
 import ar.edu.utn.dds.k3003.model.dtos.ColaboradorDTO;
+import ar.edu.utn.dds.k3003.model.dtos.FormasDeColaborarDTO;
+import ar.edu.utn.dds.k3003.model.dtos.ViandaRequest;
 import ar.edu.utn.dds.k3003.model.enums.MisFormasDeColaborar;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -117,7 +119,7 @@ public class WebApp extends TelegramLongPollingBot {
                            _Crea una nueva vianda._
                         
                         1️⃣6️⃣ `/depositar_vianda`  
-                           _Depositar una vianda en una heladera {heladeraId, ViandaQR}._
+                           _Depositar una vianda en una heladera {HeladeraId, ViandaQR}._
                         
                         1️⃣7️⃣ `/retirar_vianda`  
                            _Retirar una vianda de una heladera {ViandaQR, Tarjeta, HeladeraId}._
