@@ -2,10 +2,10 @@ package ar.edu.utn.dds.k3003.app;
 
 import ar.edu.utn.dds.k3003.clients.*;
 import ar.edu.utn.dds.k3003.facades.dtos.*;
+import ar.edu.utn.dds.k3003.facades.dtos.HeladeraDTO;
 import ar.edu.utn.dds.k3003.facades.exceptions.TrasladoNoAsignableException;
+import ar.edu.utn.dds.k3003.model.dtos.*;
 import ar.edu.utn.dds.k3003.model.dtos.ColaboradorDTO;
-import ar.edu.utn.dds.k3003.model.dtos.FormasDeColaborarDTO;
-import ar.edu.utn.dds.k3003.model.dtos.ViandaRequest;
 import ar.edu.utn.dds.k3003.model.enums.MisFormasDeColaborar;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -98,18 +98,19 @@ public class WebApp extends TelegramLongPollingBot {
                             _Devuelve una lista de heladeras_
                            
                         🔟 `/listar_disponibilidad_heladera`  
-                            -Devuelve la disponibilidad de la heladera-                        
+                            -Devuelve la disponibilidad de la heladera-     
+                                               
                         1️⃣1️⃣ `/listar_retiros_diarios_heladera`  
                             - Devuelve los retiros diarios de la heladera-
                         
                         1️⃣2️⃣ `/subscribirse_heladera`  
-                           _No implementado todavía._
+                           _.Para suscribirse al evento de  viandas disponibles de una heladera: viandasDisponibles {idColab} {idHeladera} {nviandasdisponibles}._
+                            _.Para suscribirse al evento de viandas faltantes de una heladera: viandasFaltantes {idColab} {idHeladera} {nviandasfaltantes}._
+                            _.Para suscribirse al evento de desperfecto de una heladera: heladeraDesperfecto {
                         
                         1️⃣3️⃣ `/desubscribirse_heladera`  
                            _No implementado todavía._
-                        
-                        1️⃣4️⃣ `/subscribirse_evento_heladera`  
-                           _No implementado todavía._
+                     
                         
                         🔹 *Viandas:*  
                         1️⃣5️⃣ `/nueva_vianda {CodigoQR} {fechaelab} {estado} {Colaborarid} {heladeraID}`  
@@ -396,7 +397,26 @@ public class WebApp extends TelegramLongPollingBot {
                 case "/subscribirse_heladera": {
                     SendMessage msg = new SendMessage();
                     msg.setChatId(chat_id);
-                    msg.setText("Comando no implementado");
+                    var tipoAlerta = (comando[1]);
+                    if(Objects.equals(tipoAlerta, "viandasDisponibles"))
+                    {
+                        var idColaborador= Long.valueOf(comando[2]);
+                        var idHeladera= Integer.valueOf(comando[3]);
+                        var nviandas= Integer.valueOf(comando[4]);
+                        fachadaHeladeras.suscribirViandasDisponibles(new SubscriptorDto(idColaborador,idHeladera,nviandas));
+                    }
+                    else if(Objects.equals(tipoAlerta, "viandasFaltantes")){
+                        var idColaborador= Long.valueOf(comando[2]);
+                        var idHeladera= Integer.valueOf(comando[3]);
+                        var nviandas= Integer.valueOf(comando[4]);
+                        fachadaHeladeras.suscribirViandasFaltantes(new SubscriptorDto(idColaborador,idHeladera,nviandas));
+                    }
+                    else if(Objects.equals(tipoAlerta, "heladeraDesperfecto")){
+                        var idColaborador= Long.valueOf(comando[2]);
+                        var idHeladera=Integer.valueOf(comando[3]);
+                        fachadaHeladeras.suscribirDesperfecto(new SubscriptorDesperfectoDTO(idColaborador,idHeladera));
+                    }
+                    msg.setText("Suscrito correctamente");
                     try {
                         execute(msg);
                     } catch (TelegramApiException e) {

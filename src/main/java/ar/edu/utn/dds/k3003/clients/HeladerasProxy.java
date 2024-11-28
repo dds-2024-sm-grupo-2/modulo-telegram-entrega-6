@@ -4,6 +4,8 @@ import ar.edu.utn.dds.k3003.facades.FachadaHeladeras;
 import ar.edu.utn.dds.k3003.facades.FachadaViandas;
 import ar.edu.utn.dds.k3003.facades.dtos.*;
 import ar.edu.utn.dds.k3003.model.dtos.IncidenteDTO;
+import ar.edu.utn.dds.k3003.model.dtos.SubscriptorDesperfectoDTO;
+import ar.edu.utn.dds.k3003.model.dtos.SubscriptorDto;
 import ar.edu.utn.dds.k3003.model.dtos.ViandaRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
@@ -137,5 +139,41 @@ public class HeladerasProxy implements FachadaHeladeras {
         }
 
         return response.body();
+    }
+    public void suscribirViandasDisponibles(SubscriptorDto sub) {
+        Response<Void> response;
+        try {
+            response = service.suscribirViandasDisponibles(sub).execute();
+            if (!response.isSuccessful()) {
+                throw new RuntimeException("No se pudo obtener las heladeras");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Error al depositar la vianda: ", e);
+        }
+
+    }
+    public void suscribirViandasFaltantes(SubscriptorDto sub) {
+        Response<Void> response;
+        try {
+            response = service.suscribirViandasFaltantes(sub).execute();
+            if (!response.isSuccessful()) {
+                throw new RuntimeException("No se pudo obtener las heladeras");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Error al depositar la vianda: ", e);
+        }
+
+    }
+    public void suscribirDesperfecto(SubscriptorDesperfectoDTO sub) {
+        Response<Void> response;
+        try {
+            response = service.suscribirDesperfecto(sub).execute();
+            if (!response.isSuccessful()) {
+                throw new RuntimeException("No se pudo obtener las heladeras");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Error al depositar la vianda: ", e);
+        }
+
     }
 }

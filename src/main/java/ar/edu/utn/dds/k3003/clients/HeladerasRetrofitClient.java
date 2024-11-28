@@ -3,6 +3,8 @@ package ar.edu.utn.dds.k3003.clients;
 import ar.edu.utn.dds.k3003.facades.dtos.EstadoViandaEnum;
 import ar.edu.utn.dds.k3003.facades.dtos.HeladeraDTO;
 import ar.edu.utn.dds.k3003.facades.dtos.RetiroDTO;
+import ar.edu.utn.dds.k3003.model.dtos.SubscriptorDesperfectoDTO;
+import ar.edu.utn.dds.k3003.model.dtos.SubscriptorDto;
 import ar.edu.utn.dds.k3003.model.dtos.ViandaRequest;
 import retrofit2.Call;
 import retrofit2.http.*;
@@ -28,5 +30,14 @@ public interface HeladerasRetrofitClient {
 
     @GET ("/retiros/{idHeladera}")
     Call <List<RetiroDTO>> getRetirosDelDia(@Path("idHeladera") Integer idHeladera);
+
+    @POST ("/suscribirviandasdisponibles")
+    Call <Void> suscribirViandasDisponibles(@Body SubscriptorDto subDto);
+
+    @POST ("/suscribirviandasfaltantes")
+    Call <Void> suscribirViandasFaltantes(@Body SubscriptorDto sub);
+
+    @POST ("/suscribirdesperfecto")
+    Call <Void> suscribirDesperfecto(@Body SubscriptorDesperfectoDTO sub);
 }
 
