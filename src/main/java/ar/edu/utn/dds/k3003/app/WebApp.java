@@ -113,7 +113,7 @@ public class WebApp extends TelegramLongPollingBot {
                      
                         
                         🔹 *Viandas:*  
-                        1️⃣5️⃣ `/nueva_vianda {CodigoQR} {fechaelab} {estado} {Colaborarid} {heladeraID}`  
+                        1️⃣4️⃣ `/nueva_vianda {CodigoQR} {fechaelab} {estado} {Colaborarid} {heladeraID}`  
                            _Crea una nueva vianda._
                         
                         1️⃣6️⃣ `/depositar_vianda`  
@@ -400,23 +400,26 @@ public class WebApp extends TelegramLongPollingBot {
                     var tipoAlerta = (comando[1]);
                     if(Objects.equals(tipoAlerta, "viandasDisponibles"))
                     {
-                        var idColaborador= Long.valueOf(comando[2]);
-                        var idHeladera= Integer.valueOf(comando[3]);
-                        var nviandas= Integer.valueOf(comando[4]);
+                        var idColaborador= Long.parseLong(comando[2]);
+                        var idHeladera= Integer.parseInt(comando[3]);
+                        var nviandas= Integer.parseInt(comando[4]);
                         fachadaHeladeras.suscribirViandasDisponibles(new SubscriptorDto(idColaborador,idHeladera,nviandas));
+                        msg.setText("Suscrito correctamente");
                     }
                     else if(Objects.equals(tipoAlerta, "viandasFaltantes")){
-                        var idColaborador= Long.valueOf(comando[2]);
-                        var idHeladera= Integer.valueOf(comando[3]);
-                        var nviandas= Integer.valueOf(comando[4]);
+                        var idColaborador= Long.parseLong(comando[2]);
+                        var idHeladera= Integer.parseInt(comando[3]);
+                        var nviandas= Integer.parseInt(comando[4]);
                         fachadaHeladeras.suscribirViandasFaltantes(new SubscriptorDto(idColaborador,idHeladera,nviandas));
+                        msg.setText("Suscrito correctamente");
                     }
-                    else if(Objects.equals(tipoAlerta, "heladeraDesperfecto")){
-                        var idColaborador= Long.valueOf(comando[2]);
-                        var idHeladera=Integer.valueOf(comando[3]);
-                        fachadaHeladeras.suscribirDesperfecto(new SubscriptorDesperfectoDTO(idColaborador,idHeladera));
+
+                    else if(Objects.equals(tipoAlerta, "heladeraDesperfecto")) {
+                        var idColaborador = Long.parseLong(comando[2]);
+                        var idHeladera = Integer.parseInt(comando[3]);
+                        fachadaHeladeras.suscribirDesperfecto(new SubscriptorDesperfectoDTO(idColaborador, idHeladera));
+                        msg.setText("Suscrito correctamente");
                     }
-                    msg.setText("Suscrito correctamente");
                     try {
                         execute(msg);
                     } catch (TelegramApiException e) {
