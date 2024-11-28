@@ -25,5 +25,8 @@ public interface HeladerasRetrofitClient {
     
     @GET("/viandas/{idHeladera}")
     Call <Integer> getViandasDeHeladera(@Path("idHeladera") Integer idHeladera);
+
+    @GET ("/retiros/{idHeladera}")
+    Call <List<RetiroDTO>> getRetirosDelDia(@Path("idHeladera") Integer idHeladera);
 }
 

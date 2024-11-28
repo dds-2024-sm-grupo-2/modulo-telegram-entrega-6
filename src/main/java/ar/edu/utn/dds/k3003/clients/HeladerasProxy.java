@@ -125,4 +125,17 @@ public class HeladerasProxy implements FachadaHeladeras {
 
         return response.body();
     }
+    public List<RetiroDTO> getRetirosDelDia(Integer idHeladera) {
+        Response<List<RetiroDTO>> response;
+        try {
+            response = service.getRetirosDelDia(idHeladera).execute();
+            if (!response.isSuccessful()) {
+                throw new RuntimeException("No se pudo obtener las heladeras");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Error al depositar la vianda: ", e);
+        }
+
+        return response.body();
+    }
 }
