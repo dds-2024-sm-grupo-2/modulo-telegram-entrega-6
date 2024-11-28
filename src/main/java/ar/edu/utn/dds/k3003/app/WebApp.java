@@ -117,7 +117,7 @@ public class WebApp extends TelegramLongPollingBot {
                            _Crea una nueva vianda._
                         
                         1️⃣6️⃣ `/depositar_vianda`  
-                           _Depositar una vianda en una heladera {heladeraId, ViandaQR}._
+                           _Depositar una vianda en una heladera {HeladeraId, ViandaQR}._
                         
                         1️⃣7️⃣ `/retirar_vianda`  
                            _Retirar una vianda de una heladera {ViandaQR, Tarjeta, HeladeraId}._
