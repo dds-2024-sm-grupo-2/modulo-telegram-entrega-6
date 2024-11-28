@@ -150,7 +150,6 @@ public class HeladerasProxy implements FachadaHeladeras {
         } catch (IOException e) {
             throw new RuntimeException("Error al depositar la vianda: ", e);
         }
-
     }
     public void suscribirViandasFaltantes(SubscriptorDto sub) {
         Response<Void> response;
