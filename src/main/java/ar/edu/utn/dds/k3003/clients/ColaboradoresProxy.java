@@ -66,6 +66,17 @@ public class ColaboradoresProxy implements FachadaColaboradores {
         }
     }
 
+    public void arreglarHeladera(Long colabId, IncidenteDTO incidenteDTO) {
+        try {
+            Response<Void> response = service.arreglarHeladera(colabId,incidenteDTO).execute();
+            if (!response.isSuccessful()) {
+                throw new RuntimeException("No se pudo obtener al colaborador: " + response.errorBody().string());
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Error al obtener al colaborador: ", e);
+        }
+    }
+
     @Override
     public ColaboradorDTO agregar(ColaboradorDTO colaborador) {
         return null;

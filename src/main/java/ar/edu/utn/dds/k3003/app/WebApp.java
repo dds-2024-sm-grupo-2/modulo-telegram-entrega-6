@@ -8,7 +8,9 @@ import ar.edu.utn.dds.k3003.model.dtos.*;
 import ar.edu.utn.dds.k3003.model.dtos.ColaboradorDTO;
 import ar.edu.utn.dds.k3003.model.dtos.FormasDeColaborarDTO;
 import ar.edu.utn.dds.k3003.model.dtos.ViandaRequest;
+import ar.edu.utn.dds.k3003.model.enums.EstadoIncidenteEnum;
 import ar.edu.utn.dds.k3003.model.enums.MisFormasDeColaborar;
+import ar.edu.utn.dds.k3003.model.enums.TipoIncidenteEnum;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -58,6 +60,7 @@ public class WebApp extends TelegramLongPollingBot {
 
             // Se evalua el comando recibido
             switch (comando[0]) {
+
                 // Modulo Colaboradores
                 case "/iniciar": {
                     SendMessage msg = new SendMessage();
@@ -79,20 +82,20 @@ public class WebApp extends TelegramLongPollingBot {
                             3️⃣ `/nueva_ruta {colaboradorId} {heladeraIdOrigen} {heladeraIdDestino}` 
                                _Crea una nueva ruta entre dos heladeras._
                                                     
-                            4️⃣ `/asignar_traslado {qrVianda} {heladeraIdOrigen} {heladeraIdDestino}` 
+                            4️⃣ `/asignar_traslado {colaboradorId} {qrVianda} {heladeraIdOrigen} {heladeraIdDestino}` 
                                _Asigna un traslado de una vianda._
                                                     
-                            5️⃣ `/modificar_traslado {idTraslado} {estadoTraslado}` 
+                            5️⃣ `/modificar_traslado {colaboradorId} {idTraslado} {estadoTraslado}` 
                                _Modifica el estado de un traslado._
                                                     
                             🔹 *Incidentes:* 
-                            6️⃣ `/reportar_falla_tecnica {heladeraId}` 
+                            6️⃣ `/reportar_falla_tecnica {colaboradorId} {heladeraId}` 
                                _Crea un incidente de Falla Tecnica._
                                                     
-                            7️⃣ `/resolver_incidente {idIncidente}` 
-                               _Resuelve un incidente reportado._
+                            7️⃣ `/resolver_falla_tecnica {colaboradorId} {incidenteId} {heladeraId}` 
+                               _Resuelve un incidente reportado de tipo falla tecnica._
                                                     
-                            8️⃣ `/listar_incidentes_heladera {heladeraId}` 
+                            8️⃣ `/listar_incidentes_heladera {colaboradorId} {heladeraId}` 
                                _Devuelve una lista de incidentes por heladera._
                                                     
                             🔹 *Heladeras:* 
@@ -118,10 +121,10 @@ public class WebApp extends TelegramLongPollingBot {
                             1️⃣5️⃣ `/nueva_vianda {CodigoQR} {fechaelab} {estado} {Colaborarid} {heladeraID}` 
                                _Crea una nueva vianda._
                                                     
-                            1️⃣6️⃣ `/depositar_vianda {HeladeraId} {ViandaQR}` 
+                            1️⃣6️⃣ `/depositar_vianda {colaboradorId} {HeladeraId} {ViandaQR}` 
                                _Depositar una vianda en una heladera._
                                                     
-                            1️⃣7️⃣ `/retirar_vianda {ViandaQR} {Tarjeta} {HeladeraId}` 
+                            1️⃣7️⃣ `/retirar_vianda {colaboradorId} {ViandaQR} {Tarjeta} {HeladeraId}` 
                                _Retirar una vianda de una heladera._
                         """);
                     msg.enableMarkdown(true); // Activa el formato Markdown
@@ -144,7 +147,7 @@ public class WebApp extends TelegramLongPollingBot {
                                     + "\nPUNTOS: " + colaboradorDTO.getPuntos()
                                     + "\nDINERO_DONADO: " + colaboradorDTO.getDineroDonado()
                                     + "\nHELADERAS_REPARADAS: " + colaboradorDTO.getHeladerasReparadas()
-                            //+ "\nFORMAS_DE_COLABORAR: " + colaboradorDTO.getFormas(); TODO: ARREGLAR COMO PRINTEA UNA LISTA
+                            + "\nFORMAS_DE_COLABORAR: " + colaboradorDTO.getFormas().toString()
                     );
 
                     try {
@@ -188,6 +191,7 @@ public class WebApp extends TelegramLongPollingBot {
                     }
                     break;
                 }
+
                 // Modulo Logistica
                 case "/nueva_ruta": { // {colaboradorId} {heladeraIdOrigen} {heladeraIdDestino}
 
@@ -207,6 +211,20 @@ public class WebApp extends TelegramLongPollingBot {
                     var heladeraIdOrigen = Integer.parseInt(comando[2]);
                     var heladeraIdDestino = Integer.parseInt(comando[3]);
 
+                    ColaboradorDTO colaboradorDTO = fachadaColaboradores.getColab(colaboradorId);
+
+                    if (!colaboradorDTO.getFormas().contains(MisFormasDeColaborar.TRANSPORTADOR)) {
+                        SendMessage msg = new SendMessage();
+                        msg.setChatId(chat_id);
+                        msg.setText("El usuario no tiene permisos para crear una ruta");
+                        try {
+                            execute(msg);
+                        } catch (TelegramApiException e) {
+                            throw new RuntimeException(e);
+                        }
+                        break;
+                    }
+
                     fachadaLogistica.nueva_ruta(colaboradorId, heladeraIdOrigen, heladeraIdDestino);
 
                     SendMessage msg = new SendMessage();
@@ -222,9 +240,9 @@ public class WebApp extends TelegramLongPollingBot {
                     }
                     break;
                 }
-                case "/asignar_traslado": { // {qrVianda} {heladeraIdOrigen} {heladeraIdDestino}
+                case "/asignar_traslado": { // {colaboradorId} {qrVianda} {heladeraIdOrigen} {heladeraIdDestino}
 
-                    if(comando.length != 4) {
+                    if(comando.length != 5) {
                         SendMessage msg = new SendMessage();
                         msg.setChatId(chat_id);
                         msg.setText("Comando incorrecto. Por favor, utilice /iniciar para ver los comandos disponibles.");
@@ -236,9 +254,24 @@ public class WebApp extends TelegramLongPollingBot {
                         break;
                     }
 
-                    var qrVianda = String.valueOf(comando[1]);
-                    var heladeraIdOrigen = Integer.parseInt(comando[2]);
-                    var heladeraIdDestino = Integer.parseInt(comando[3]);
+                    var colaboradorId = Long.parseLong(comando[1]);
+                    var qrVianda = String.valueOf(comando[2]);
+                    var heladeraIdOrigen = Integer.parseInt(comando[3]);
+                    var heladeraIdDestino = Integer.parseInt(comando[4]);
+
+                    ColaboradorDTO colaboradorDTO = fachadaColaboradores.getColab(colaboradorId);
+
+                    if (!colaboradorDTO.getFormas().contains(MisFormasDeColaborar.TRANSPORTADOR)) {
+                        SendMessage msg = new SendMessage();
+                        msg.setChatId(chat_id);
+                        msg.setText("El usuario no tiene permisos para asignar un traslado");
+                        try {
+                            execute(msg);
+                        } catch (TelegramApiException e) {
+                            throw new RuntimeException(e);
+                        }
+                        break;
+                    }
 
                     TrasladoDTO traslado = fachadaLogistica.asignar_traslado(qrVianda, heladeraIdOrigen, heladeraIdDestino);
 
@@ -256,7 +289,7 @@ public class WebApp extends TelegramLongPollingBot {
                     }
                     break;
                 }
-                case "/modificar_traslado": { // {idTraslado} {estadoTraslado}
+                case "/modificar_traslado": { // {colaboradorId} {idTraslado} {estadoTraslado}
 
                     if(comando.length != 3) {
                         SendMessage msg = new SendMessage();
@@ -270,8 +303,23 @@ public class WebApp extends TelegramLongPollingBot {
                         break;
                     }
 
-                    var idTraslado = Long.parseLong(comando[1]);
-                    var estadpTraslado = EstadoTrasladoEnum.valueOf(comando[2]);
+                    var colaboradorId = Long.parseLong(comando[1]);
+                    var idTraslado = Long.parseLong(comando[2]);
+                    var estadpTraslado = EstadoTrasladoEnum.valueOf(comando[3]);
+
+                    ColaboradorDTO colaboradorDTO = fachadaColaboradores.getColab(colaboradorId);
+
+                    if (!colaboradorDTO.getFormas().contains(MisFormasDeColaborar.TRANSPORTADOR)) {
+                        SendMessage msg = new SendMessage();
+                        msg.setChatId(chat_id);
+                        msg.setText("El usuario no tiene permisos para modificar el estado del traslado");
+                        try {
+                            execute(msg);
+                        } catch (TelegramApiException e) {
+                            throw new RuntimeException(e);
+                        }
+                        break;
+                    }
 
                     fachadaLogistica.modificar_traslado(idTraslado, estadpTraslado);
 
@@ -287,9 +335,11 @@ public class WebApp extends TelegramLongPollingBot {
                     }
                     break;
                 }
+
                 // Modulo Incidentes
-                case "/reportar_falla_tecnica": { //{heladeraId}
-                    if (comando.length != 2) {
+                case "/reportar_falla_tecnica": { // {colaboradorId} {heladeraId}
+
+                    if (comando.length != 3) {
                         SendMessage errorMsg = new SendMessage();
                         errorMsg.setChatId(chat_id);
                         errorMsg.setText("Uso incorrecto. Formato: /reportar_falla_tecnica {heladeraId}");
@@ -301,7 +351,22 @@ public class WebApp extends TelegramLongPollingBot {
                         break;
                     }
 
-                    var heladeraId = Long.parseLong(comando[1]);
+                    var heladeraId = Long.parseLong(comando[2]);
+                    var colaboradorId = Long.parseLong(comando[1]);
+
+                    ColaboradorDTO colaboradorDTO = fachadaColaboradores.getColab(colaboradorId);
+
+                    if (!colaboradorDTO.getFormas().contains(MisFormasDeColaborar.TECNICO)) {
+                        SendMessage msg = new SendMessage();
+                        msg.setChatId(chat_id);
+                        msg.setText("El usuario no tiene permisos para reportar la falla tecnica");
+                        try {
+                            execute(msg);
+                        } catch (TelegramApiException e) {
+                            throw new RuntimeException(e);
+                        }
+                        break;
+                    }
 
                     fachadaIncidentes.crearIncidente(heladeraId);
 
@@ -315,10 +380,9 @@ public class WebApp extends TelegramLongPollingBot {
                     }
                     break;
                 }
+                case "/resolver_falla_tecnica": { // {colaboradorId} {incidenteId} {heladeraId}
 
-                case "/resolver_incidente": { // {incidenteId}
-
-                    if(comando.length != 2) {
+                    if(comando.length != 4) {
                         SendMessage msg = new SendMessage();
                         msg.setChatId(chat_id);
                         msg.setText("Comando incorrecto. Por favor, utilice /iniciar para ver los comandos disponibles.");
@@ -330,8 +394,29 @@ public class WebApp extends TelegramLongPollingBot {
                         break;
                     }
 
-                    var incidenteId = Long.parseLong(comando[1]);
+                    var heladeraId = Long.parseLong(comando[3]);
+                    var incidenteId = Long.parseLong(comando[2]);
+                    var colaboradorId = Long.parseLong(comando[1]);
 
+                    ColaboradorDTO colaboradorDTO = fachadaColaboradores.getColab(colaboradorId);
+
+                    if (!colaboradorDTO.getFormas().contains(MisFormasDeColaborar.TECNICO)) {
+                        SendMessage msg = new SendMessage();
+                        msg.setChatId(chat_id);
+                        msg.setText("El usuario no tiene permisos para resolver la falla tecnica");
+                        try {
+                            execute(msg);
+                        } catch (TelegramApiException e) {
+                            throw new RuntimeException(e);
+                        }
+                        break;
+                    }
+
+                    IncidenteDTO incidente = new IncidenteDTO(TipoIncidenteEnum.FALLA_TECNICA,heladeraId, EstadoIncidenteEnum.RESUELTO, false, 0, 0);
+
+                    incidente.setId(incidenteId);
+
+                    fachadaColaboradores.arreglarHeladera(colaboradorId,incidente);
                     fachadaIncidentes.resolver_incidente(incidenteId);
 
                     SendMessage msg = new SendMessage();
@@ -344,8 +429,9 @@ public class WebApp extends TelegramLongPollingBot {
                     }
                     break;
                 }
-                case "/listar_incidentes_heladera": {
-                    if (comando.length != 2) {
+                case "/listar_incidentes_heladera": { // {colaboradorId} {heladeraId}
+
+                    if (comando.length != 3) {
                         SendMessage errorMsg = new SendMessage();
                         errorMsg.setChatId(chat_id);
                         errorMsg.setText("Comando incorrecto. Por favor, utilice /iniciar para ver los comandos disponibles.");
@@ -357,7 +443,22 @@ public class WebApp extends TelegramLongPollingBot {
                         break;
                     }
 
-                    var heladeraId = Long.parseLong(comando[1]);
+                    var colaboradorId = Long.parseLong(comando[1]);
+                    var heladeraId = Long.parseLong(comando[2]);
+
+                    ColaboradorDTO colaboradorDTO = fachadaColaboradores.getColab(colaboradorId);
+
+                    if (!colaboradorDTO.getFormas().contains(MisFormasDeColaborar.TECNICO)) {
+                        SendMessage msg = new SendMessage();
+                        msg.setChatId(chat_id);
+                        msg.setText("El usuario no tiene permisos para listar los incidentes");
+                        try {
+                            execute(msg);
+                        } catch (TelegramApiException e) {
+                            throw new RuntimeException(e);
+                        }
+                        break;
+                    }
 
                     try {
                         List<IncidenteDTO> incidentes = fachadaIncidentes.listarIncidentesPorHeladera(heladeraId);
@@ -489,8 +590,10 @@ public class WebApp extends TelegramLongPollingBot {
                     }
                     break;
                 }
+
                 // Modulo Viandas
                 case "/nueva_vianda": { //{CodigoQR} {fechaelab} {estado} {Colaborarid} {heladeraID}
+
                     if(comando.length != 6) {
                         SendMessage msg = new SendMessage();
                         msg.setChatId(chat_id);
@@ -502,11 +605,26 @@ public class WebApp extends TelegramLongPollingBot {
                         }
                         break;
                     }
+
                     var codigoQR = String.valueOf(comando[1]);
                     var fechaElaboracion = LocalDateTime.parse(comando[2]);
                     var estado = EstadoViandaEnum.valueOf(comando[3]);
                     var colaboradorid = Long.parseLong(comando[4]);
                     var heladeraid = Integer.parseInt(comando[5]);
+
+                    ColaboradorDTO colaboradorDTO = fachadaColaboradores.getColab(colaboradorid);
+
+                    if (!colaboradorDTO.getFormas().contains(MisFormasDeColaborar.DONADOR)) {
+                        SendMessage msg = new SendMessage();
+                        msg.setChatId(chat_id);
+                        msg.setText("El usuario no tiene permisos para crear una vianda");
+                        try {
+                            execute(msg);
+                        } catch (TelegramApiException e) {
+                            throw new RuntimeException(e);
+                        }
+                        break;
+                    }
 
                     fachadaViandas.agregar(codigoQR, fechaElaboracion, estado, colaboradorid, heladeraid);
 
@@ -525,9 +643,9 @@ public class WebApp extends TelegramLongPollingBot {
                     }
                     break;
                 }
+                case "/depositar_vianda": { // {colaboradorId} {heladeraId, ViandaQR}
 
-                case "/depositar_vianda": { //{heladeraId, ViandaQR}
-                    if(comando.length != 3) {
+                    if(comando.length != 4) {
                         SendMessage msg = new SendMessage();
                         msg.setChatId(chat_id);
                         msg.setText("Comando incorrecto. Por favor, utilice /iniciar para ver los comandos disponibles.");
@@ -539,8 +657,24 @@ public class WebApp extends TelegramLongPollingBot {
                         break;
                     }
 
-                    var heladeraId = Integer.valueOf(comando[1]);
-                    var qrVianda = String.valueOf(comando[2]);
+                    var colaboradorId = Long.parseLong(comando[1]);
+                    var heladeraId = Integer.valueOf(comando[2]);
+                    var qrVianda = String.valueOf(comando[3]);
+
+                    ColaboradorDTO colaboradorDTO = fachadaColaboradores.getColab(colaboradorId);
+
+                    if (!colaboradorDTO.getFormas().contains(MisFormasDeColaborar.TRANSPORTADOR)) {
+                        SendMessage msg = new SendMessage();
+                        msg.setChatId(chat_id);
+                        msg.setText("El usuario no tiene permisos para depositar una vianda");
+                        try {
+                            execute(msg);
+                        } catch (TelegramApiException e) {
+                            throw new RuntimeException(e);
+                        }
+                        break;
+                    }
+
                     System.out.println(heladeraId);
                     System.out.println(qrVianda);
 
@@ -557,9 +691,9 @@ public class WebApp extends TelegramLongPollingBot {
                     }
                     break;
                 }
+                case "/retirar_vianda": { // {colaboradorId} {ViandaQR} {Tarjeta} {HeladeraId}
 
-                case "/retirar_vianda": { //{ViandaQR, Tarjeta, HeladeraId}
-                    if(comando.length != 4) {
+                    if(comando.length != 5) {
                         SendMessage msg = new SendMessage();
                         msg.setChatId(chat_id);
                         msg.setText("Comando incorrecto. Por favor, utilice /iniciar para ver los comandos disponibles.");
@@ -571,9 +705,24 @@ public class WebApp extends TelegramLongPollingBot {
                         break;
                     }
 
-                    var qrVianda = String.valueOf(comando[1]);
-                    var tarjeta = String.valueOf(comando[2]);
-                    var heladeraId = Integer.parseInt(comando[3]);
+                    var colaboradorId = Long.parseLong(comando[1]);
+                    var qrVianda = String.valueOf(comando[2]);
+                    var tarjeta = String.valueOf(comando[3]);
+                    var heladeraId = Integer.parseInt(comando[4]);
+
+                    ColaboradorDTO colaboradorDTO = fachadaColaboradores.getColab(colaboradorId);
+
+                    if (!colaboradorDTO.getFormas().contains(MisFormasDeColaborar.TRANSPORTADOR)) {
+                        SendMessage msg = new SendMessage();
+                        msg.setChatId(chat_id);
+                        msg.setText("El usuario no tiene permisos para retirar una vianda");
+                        try {
+                            execute(msg);
+                        } catch (TelegramApiException e) {
+                            throw new RuntimeException(e);
+                        }
+                        break;
+                    }
 
                     RetiroDTO retiroDTO = new RetiroDTO(qrVianda, tarjeta, heladeraId);
                     fachadaHeladeras.retirar(retiroDTO);
@@ -588,6 +737,7 @@ public class WebApp extends TelegramLongPollingBot {
                     }
                     break;
                 }
+
                 // Comando no reconocido
                 default: {
                     SendMessage msg = new SendMessage();

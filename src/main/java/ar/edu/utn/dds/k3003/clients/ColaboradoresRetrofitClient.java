@@ -17,6 +17,10 @@ public interface ColaboradoresRetrofitClient {
 
     @PATCH("colaboradores/{colabID}")
     Call<Void> cambiarFormas(@Path("colabID") Long id, @Body FormasDeColaborarDTO formas);
+
     @POST("fallas")
     Call<Void> reportarFalla(@Body IncidenteDTO incidenteDTO);
+
+    @POST("arreglarHeladera/colaborador/{colabID}")
+    Call<Void> arreglarHeladera(@Path("colabID") Long colabId, @Body IncidenteDTO incidenteDTO);
 }
