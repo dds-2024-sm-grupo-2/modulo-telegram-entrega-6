@@ -417,7 +417,6 @@ public class WebApp extends TelegramLongPollingBot {
                     incidente.setId(incidenteId);
 
                     fachadaColaboradores.arreglarHeladera(colaboradorId,incidente);
-                    fachadaIncidentes.resolver_incidente(incidenteId);
 
                     SendMessage msg = new SendMessage();
                     msg.setChatId(chat_id);
