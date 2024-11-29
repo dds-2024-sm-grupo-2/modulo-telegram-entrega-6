@@ -5,6 +5,7 @@ import ar.edu.utn.dds.k3003.facades.FachadaHeladeras;
 import ar.edu.utn.dds.k3003.facades.FachadaLogistica;
 import ar.edu.utn.dds.k3003.facades.FachadaViandas;
 import ar.edu.utn.dds.k3003.facades.dtos.*;
+import ar.edu.utn.dds.k3003.model.dtos.ColaboradorConChatDTO;
 import ar.edu.utn.dds.k3003.model.dtos.FormasDeColaborarDTO;
 import ar.edu.utn.dds.k3003.model.dtos.IncidenteDTO;
 import ar.edu.utn.dds.k3003.model.enums.MisFormasDeColaborar;
@@ -52,6 +53,17 @@ public class ColaboradoresProxy implements FachadaColaboradores {
             }
         } catch (IOException e) {
             throw new RuntimeException("Error al cambiar las formas: ", e);
+        }
+    }
+
+    public void nuevoColaborador(ColaboradorConChatDTO colaboradorConChatDTO){
+        try {
+            Response<Void> response = service.nuevoColaborador(colaboradorConChatDTO).execute();
+            if (!response.isSuccessful()) {
+                throw new RuntimeException("No se pudo crear al colaborador: " + response.errorBody().string());
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Error al crear al colaborador: ", e);
         }
     }
 

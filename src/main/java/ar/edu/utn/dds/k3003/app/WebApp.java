@@ -72,6 +72,9 @@ public class WebApp extends TelegramLongPollingBot {
                             📋 *Comandos Disponibles:*
                                                     
                             🔹 *Colaboradores:* 
+                            1️⃣ `/nuevo_colaborador {nombre} {[formas]}` 
+                               _Crea un nuevo colaborador con un chatID._
+                               
                             1️⃣ `/datos_colaborador {colaboradorId}` 
                                _Muestra los datos de un colaborador._
                                                     
@@ -134,6 +137,39 @@ public class WebApp extends TelegramLongPollingBot {
                         throw new RuntimeException(e);
                     }
                     break;
+                }
+                case "/nuevo_colaborador":{
+                    var nombre = String.valueOf(comando[1]);
+                    var formasSTR = comando[2];
+                    String sinCorchetes = formasSTR.replace("[", "").replace("]", "").trim();
+                    //System.out.println(sinCorchetes);
+                    // Divide por comas y convierte a una lista
+                    String[] formas = sinCorchetes.split(",");
+                    List<MisFormasDeColaborar> formasLista = new ArrayList<>();
+
+                    //System.out.println(formas);
+
+                    for (String forma : formas) {
+                        formasLista.add(MisFormasDeColaborar.valueOf(forma.toUpperCase()));
+                    }
+
+                    //System.out.println(formasLista);
+
+                    ColaboradorConChatDTO colaboradorConChatDTO = new ColaboradorConChatDTO(nombre, formasLista, chat_id);
+                    fachadaColaboradores.nuevoColaborador(colaboradorConChatDTO);
+
+                    SendMessage msg2 = new SendMessage();
+                    msg2.setChatId(chat_id);
+                    msg2.setText("Colaborador creado correctamente");
+
+                    try {
+                        execute(msg2);
+                    } catch (TelegramApiException e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+
+
                 }
                 case "/datos_colaborador": {
                     var id_colaborador = Long.parseLong(comando[1]);
