@@ -345,18 +345,56 @@ public class WebApp extends TelegramLongPollingBot {
                     break;
                 }
                 case "/listar_incidentes_heladera": {
+                    if (comando.length != 2) {
+                        SendMessage errorMsg = new SendMessage();
+                        errorMsg.setChatId(chat_id);
+                        errorMsg.setText("Comando incorrecto. Por favor, utilice /iniciar para ver los comandos disponibles.");
+                        try {
+                            execute(errorMsg);
+                        } catch (TelegramApiException e) {
+                            throw new RuntimeException(e);
+                        }
+                        break;
+                    }
 
+                    var heladeraId = Long.parseLong(comando[1]);
 
-                    SendMessage msg = new SendMessage();
-                    msg.setChatId(chat_id);
-                    msg.setText("Comando no implementado");
                     try {
-                        execute(msg);
-                    } catch (TelegramApiException e) {
-                        throw new RuntimeException(e);
+                        List<IncidenteDTO> incidentes = fachadaIncidentes.listarIncidentesPorHeladera(heladeraId);
+
+                        if (incidentes.isEmpty()) {
+                            SendMessage msg = new SendMessage();
+                            msg.setChatId(chat_id);
+                            msg.setText("No se encontraron incidentes para la heladera con ID " + heladeraId);
+                            execute(msg);
+                        } else {
+                            StringBuilder incidentesTexto = new StringBuilder("Incidentes para la heladera con ID " + heladeraId + ":\n\n");
+                            for (IncidenteDTO incidente : incidentes) {
+                                incidentesTexto.append("ID: ").append(incidente.getId())
+                                        .append("\nTipo: ").append(incidente.getTipoIncidente())
+                                        .append("\nEstado: ").append(incidente.getEstadoIncidente())
+                                        .append("\nExcede Temperatura: ").append(incidente.isExcedeTemperatura() ? "Sí" : "No")
+                                        .append("\n\n");
+                            }
+
+                            SendMessage msg = new SendMessage();
+                            msg.setChatId(chat_id);
+                            msg.setText(incidentesTexto.toString());
+                            execute(msg);
+                        }
+                    } catch (Exception e) {
+                        SendMessage errorMsg = new SendMessage();
+                        errorMsg.setChatId(chat_id);
+                        errorMsg.setText("Error al obtener los incidentes: " + e.getMessage());
+                        try {
+                            execute(errorMsg);
+                        } catch (TelegramApiException ex) {
+                            throw new RuntimeException(ex);
+                        }
                     }
                     break;
                 }
+
                 // Modulo Heladeras
                 case "/listar_heladeras_zona": {
                     SendMessage msg = new SendMessage();

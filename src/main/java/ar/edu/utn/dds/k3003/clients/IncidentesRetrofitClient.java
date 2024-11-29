@@ -7,6 +7,8 @@ import ar.edu.utn.dds.k3003.model.dtos.IncidenteDTO;
 import retrofit2.Call;
 import retrofit2.http.*;
 
+import java.util.List;
+
 public interface IncidentesRetrofitClient {
 
     @POST("incidentes")
@@ -14,5 +16,8 @@ public interface IncidentesRetrofitClient {
 
     @POST("incidentes/{incidenteId}")
     Call<Void> resolver_incidente(@Path("incidenteId") Long incidenteId, @Body IncidenteDTO incidenteDTO);
+
+    @GET("incidentes")
+    Call<List<IncidenteDTO>> listarIncidentesPorHeladera(@Query("heladeraId") Long heladeraId);
 
 }

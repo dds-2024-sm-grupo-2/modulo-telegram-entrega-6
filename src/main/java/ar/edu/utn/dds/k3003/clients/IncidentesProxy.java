@@ -50,4 +50,16 @@ public class IncidentesProxy{
             throw new RuntimeException("Error al cambiar las formas: ", e);
         }
     }
+
+    public List<IncidenteDTO> listarIncidentesPorHeladera(Long heladeraId) {
+        try {
+            Response<List<IncidenteDTO>> response = service.listarIncidentesPorHeladera(heladeraId).execute();
+            if (!response.isSuccessful()) {
+                throw new RuntimeException("No se pudo listar los incidentes: " + response.errorBody().string());
+            }
+            return response.body();
+        } catch (IOException e) {
+            throw new RuntimeException("Error al listar los incidentes: ", e);
+        }
+    }
 }
