@@ -4,6 +4,7 @@ import ar.edu.utn.dds.k3003.clients.*;
 import ar.edu.utn.dds.k3003.facades.dtos.*;
 import ar.edu.utn.dds.k3003.facades.dtos.HeladeraDTO;
 import ar.edu.utn.dds.k3003.facades.exceptions.TrasladoNoAsignableException;
+import ar.edu.utn.dds.k3003.model.Controller.TelegramController;
 import ar.edu.utn.dds.k3003.model.dtos.*;
 import ar.edu.utn.dds.k3003.model.dtos.ColaboradorDTO;
 import ar.edu.utn.dds.k3003.model.dtos.FormasDeColaborarDTO;
@@ -809,6 +810,8 @@ public class WebApp extends TelegramLongPollingBot {
         fachadaHeladeras = new HeladerasProxy(objectMapper);
         fachadaViandas = new ViandasProxy(objectMapper);
 
+        TelegramController telegramController = new TelegramController(objectMapper);
+
         final var registry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
         registry.config().commonTags("app", "metrics-sample");
 
@@ -829,6 +832,7 @@ public class WebApp extends TelegramLongPollingBot {
 
         var app = Javalin.create(config -> { config.registerPlugin(micrometerPlugin); }).start(port);
 
+        app.post("notificar/{chatID}", telegramController::notificar);
         // Endpoint para obtener las métricas
         app.get("/metrics", ctx -> {
             var auth = ctx.header("Authorization");
