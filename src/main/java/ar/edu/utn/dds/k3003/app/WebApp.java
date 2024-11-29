@@ -291,7 +291,7 @@ public class WebApp extends TelegramLongPollingBot {
                 }
                 case "/modificar_traslado": { // {colaboradorId} {idTraslado} {estadoTraslado}
 
-                    if(comando.length != 3) {
+                    if(comando.length != 4) {
                         SendMessage msg = new SendMessage();
                         msg.setChatId(chat_id);
                         msg.setText("Comando incorrecto. Por favor, utilice /iniciar para ver los comandos disponibles.");
