@@ -127,7 +127,22 @@ public class HeladerasProxy implements FachadaHeladeras {
 
         return response.body();
     }
-    public List<RetiroDTO> getRetirosDelDia(Integer idHeladera) {
+
+    public List<String> getRetirosDelDiaFormatted(List<RetiroDTO> retiros) {
+        List<String> formattedRetiros = new ArrayList<>();
+        for (RetiroDTO retiro : retiros) {
+            formattedRetiros.add(formatRetiro(retiro));
+        }
+        return formattedRetiros;
+    }
+
+    private String formatRetiro(RetiroDTO retiro) {
+        return "{ id=" + retiro.getId() +
+                ", tarjeta='" + retiro.getTarjeta() + '\'' +
+                ", heladeraId=" + retiro.getHeladeraId() + '}';
+    }
+
+    public List<String> getRetirosDelDia(Integer idHeladera) {
         Response<List<RetiroDTO>> response;
         try {
             response = service.getRetirosDelDia(idHeladera).execute();
@@ -138,7 +153,7 @@ public class HeladerasProxy implements FachadaHeladeras {
             throw new RuntimeException("Error al depositar la vianda: ", e);
         }
 
-        return response.body();
+        return this.getRetirosDelDiaFormatted(response.body());
     }
     public void suscribirViandasDisponibles(SubscriptorDto sub) {
         Response<Void> response;

@@ -560,9 +560,9 @@ public class WebApp extends TelegramLongPollingBot {
                 case "/listar_retiros_diarios_heladera": {
                     SendMessage msg = new SendMessage();
                     var idHeladera = Integer.parseInt((comando[1]));
-                    List <RetiroDTO> retirosDelDia = fachadaHeladeras.getRetirosDelDia(idHeladera);
+                    List <String> retirosDelDia = fachadaHeladeras.getRetirosDelDia(idHeladera);
                     msg.setChatId(chat_id);
-                    msg.setText(retirosDelDia);
+                    msg.setText(retirosDelDia.toString());
                     try {
                         execute(msg);
                     } catch (TelegramApiException e) {
