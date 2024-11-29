@@ -562,7 +562,7 @@ public class WebApp extends TelegramLongPollingBot {
                     var idHeladera = Integer.parseInt((comando[1]));
                     List <RetiroDTO> retirosDelDia = fachadaHeladeras.getRetirosDelDia(idHeladera);
                     msg.setChatId(chat_id);
-                    msg.setText(retirosDelDia.toString());
+                    msg.setText(retirosDelDia);
                     try {
                         execute(msg);
                     } catch (TelegramApiException e) {
