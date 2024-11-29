@@ -17,7 +17,7 @@ public interface IncidentesRetrofitClient {
     @POST("incidentes/{incidenteId}")
     Call<Void> resolver_incidente(@Path("incidenteId") Long incidenteId, @Body IncidenteDTO incidenteDTO);
 
-    @GET("incidentes")
+    @GET("/listar_fallas")
     Call<List<IncidenteDTO>> listarIncidentesPorHeladera(@Query("heladeraId") Long heladeraId);
 
 }
