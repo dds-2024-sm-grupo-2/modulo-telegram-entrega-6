@@ -92,8 +92,8 @@ public class WebApp extends TelegramLongPollingBot {
                             7️⃣ `/resolver_incidente {idIncidente}` 
                                _Resuelve un incidente reportado._
                                                     
-                            8️⃣ `/listar_incidentes_heladera` 
-                               _No implementado todavía._
+                            8️⃣ `/listar_incidentes_heladera {heladeraId}` 
+                               _Devuelve una lista de incidentes por heladera._
                                                     
                             🔹 *Heladeras:* 
                             9️⃣ `/listar_heladeras_zona` 
