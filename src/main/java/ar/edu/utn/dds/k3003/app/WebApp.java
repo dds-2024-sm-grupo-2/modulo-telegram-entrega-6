@@ -56,6 +56,8 @@ public class WebApp extends TelegramLongPollingBot {
             var chat_id = update.getMessage().getChatId();
             var message_received = update.getMessage().getText();
 
+            System.out.println("El CHAT_ID es: " + chat_id);
+
             // Se divide el mensaje recibido por espacios
             var comando = message_received.split(" ");
 
