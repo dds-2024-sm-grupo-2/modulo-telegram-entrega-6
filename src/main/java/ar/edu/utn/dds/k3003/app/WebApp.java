@@ -617,20 +617,20 @@ public class WebApp extends TelegramLongPollingBot {
                         var idColaborador= Long.parseLong(comando[2]);
                         var idHeladera= Integer.parseInt(comando[3]);
                         fachadaHeladeras.desuscribirViandasDisponibles(new DesSuscripcionDTO(idHeladera, idColaborador));
-                        msg.setText("Suscrito correctamente");
+                        msg.setText("DeSuscrito correctamente");
                     }
                     else if(Objects.equals(tipoAlerta, "viandasFaltantes")){
                         var idColaborador= Long.parseLong(comando[2]);
                         var idHeladera= Integer.parseInt(comando[3]);
                         fachadaHeladeras.desuscribirViandasFaltantes(new DesSuscripcionDTO(idHeladera, idColaborador));
-                        msg.setText("Suscrito correctamente");
+                        msg.setText("DeSuscrito correctamente");
                     }
 
                     else if(Objects.equals(tipoAlerta, "heladeraDesperfecto")) {
                         var idColaborador= Long.parseLong(comando[2]);
                         var idHeladera= Integer.parseInt(comando[3]);
                         fachadaHeladeras.desuscribirDesperfecto(new DesSuscripcionDTO(idHeladera, idColaborador));
-                        msg.setText("Suscrito correctamente");
+                        msg.setText("DeSuscrito correctamente");
                     }
                     try {
                         execute(msg);
