@@ -3,10 +3,8 @@ package ar.edu.utn.dds.k3003.clients;
 import ar.edu.utn.dds.k3003.facades.FachadaHeladeras;
 import ar.edu.utn.dds.k3003.facades.FachadaViandas;
 import ar.edu.utn.dds.k3003.facades.dtos.*;
-import ar.edu.utn.dds.k3003.model.dtos.IncidenteDTO;
-import ar.edu.utn.dds.k3003.model.dtos.SubscriptorDesperfectoDTO;
-import ar.edu.utn.dds.k3003.model.dtos.SubscriptorDto;
-import ar.edu.utn.dds.k3003.model.dtos.ViandaRequest;
+import ar.edu.utn.dds.k3003.facades.dtos.HeladeraDTO;
+import ar.edu.utn.dds.k3003.model.dtos.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
@@ -190,4 +188,39 @@ public class HeladerasProxy implements FachadaHeladeras {
         }
 
     }
+    public void desuscribirDesperfecto(DesSuscripcionDTO desub) {
+        Response<Void> response;
+        try {
+            response = service.desuscribirDesperfecto(desub).execute();
+            if (!response.isSuccessful()) {
+                throw new RuntimeException("No se pudo obtener las heladeras");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Error al depositar la vianda: ", e);
+        }
+    }
+    public void desuscribirViandasDisponibles(DesSuscripcionDTO desub) {
+        Response<Void> response;
+        try {
+            response = service.desuscribirViandasDisponibles(desub).execute();
+            if (!response.isSuccessful()) {
+                throw new RuntimeException("No se pudo obtener las heladeras");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Error al depositar la vianda: ", e);
+        }
+    }
+    public void desuscribirViandasFaltantes(DesSuscripcionDTO desub) {
+        Response<Void> response;
+        try {
+            response = service.desuscribirViandasFaltantes(desub).execute();
+            if (!response.isSuccessful()) {
+                throw new RuntimeException("No se pudo obtener las heladeras");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Error al depositar la vianda: ", e);
+        }
+    }
+
+
 }

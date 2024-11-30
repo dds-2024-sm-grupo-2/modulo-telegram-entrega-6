@@ -121,7 +121,9 @@ public class WebApp extends TelegramLongPollingBot {
                                                                                                                                         
                                                     
                             1️⃣3️⃣ `/desubscribirse_heladera` 
-                               _No implementado todavía._
+                            _Para desuscribirse del evento de viandas disponibles de una heladera: viandasDisponibles {idColab} {idHeladera}._
+                            _Para desuscribirse del evento de viandas faltantes de una heladera: viandasFaltantes {idColab} {idHeladera}._ 
+                            _Para desuscribirse del evento de desperfecto de una heladera: heladeraDesperfecto {idColab} {idHeladera}._
                                                     
                             🔹 *Viandas:* 
                             1️⃣5️⃣ `/nueva_vianda {CodigoQR} {fechaelab} {estado} {Colaborarid} {heladeraID}` 
@@ -609,26 +611,34 @@ public class WebApp extends TelegramLongPollingBot {
                 case "/desubscribirse_heladera": {
                     SendMessage msg = new SendMessage();
                     msg.setChatId(chat_id);
-                    msg.setText("Comando no implementado");
-                    try {
-                        execute(msg);
-                    } catch (TelegramApiException e) {
-                        throw new RuntimeException(e);
+                    var tipoAlerta = (comando[1]);
+                    if(Objects.equals(tipoAlerta, "viandasDisponibles"))
+                    {
+                        var idColaborador= Long.parseLong(comando[2]);
+                        var idHeladera= Integer.parseInt(comando[3]);
+                        fachadaHeladeras.desuscribirViandasDisponibles(new DesSuscripcionDTO(idHeladera, idColaborador));
+                        msg.setText("Suscrito correctamente");
                     }
-                    break;
-                }
-                case "/subscribirse_evento_heladera": {
-                    SendMessage msg = new SendMessage();
-                    msg.setChatId(chat_id);
-                    msg.setText("Comando no implementado");
-                    try {
-                        execute(msg);
-                    } catch (TelegramApiException e) {
-                        throw new RuntimeException(e);
+                    else if(Objects.equals(tipoAlerta, "viandasFaltantes")){
+                        var idColaborador= Long.parseLong(comando[2]);
+                        var idHeladera= Integer.parseInt(comando[3]);
+                        fachadaHeladeras.desuscribirViandasFaltantes(new DesSuscripcionDTO(idHeladera, idColaborador));
+                        msg.setText("Suscrito correctamente");
                     }
-                    break;
-                }
 
+                    else if(Objects.equals(tipoAlerta, "heladeraDesperfecto")) {
+                        var idColaborador= Long.parseLong(comando[2]);
+                        var idHeladera= Integer.parseInt(comando[3]);
+                        fachadaHeladeras.desuscribirDesperfecto(new DesSuscripcionDTO(idHeladera, idColaborador));
+                        msg.setText("Suscrito correctamente");
+                    }
+                    try {
+                        execute(msg);
+                    } catch (TelegramApiException e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+                }
                 // Modulo Viandas
                 case "/nueva_vianda": { //{CodigoQR} {fechaelab} {estado} {Colaborarid} {heladeraID}
 
