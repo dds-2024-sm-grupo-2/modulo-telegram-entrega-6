@@ -1,6 +1,7 @@
 package ar.edu.utn.dds.k3003.model.Controller;
 
 import ar.edu.utn.dds.k3003.model.dtos.ColaboradorConChatDTO;
+import ar.edu.utn.dds.k3003.model.dtos.MensajeDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -20,11 +21,13 @@ public class TelegramController extends TelegramLongPollingBot {
     public void notificar(Context ctx){
         var idString = ctx.pathParam("chatID");
         Long chatID = Long.parseLong(idString);
-        var msg = ctx.bodyAsClass(String.class);
+        var msg = ctx.bodyAsClass(MensajeDTO.class);
+
+        System.out.println(chatID);
 
         SendMessage msg2 = new SendMessage();
         msg2.setChatId(chatID);
-        msg2.setText(msg);
+        msg2.setText(msg.getMensaje());
 
         try {
             execute(msg2);
