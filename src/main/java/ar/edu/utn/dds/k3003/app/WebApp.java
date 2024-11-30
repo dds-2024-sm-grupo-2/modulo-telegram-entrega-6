@@ -832,7 +832,16 @@ public class WebApp extends TelegramLongPollingBot {
 
         var app = Javalin.create(config -> { config.registerPlugin(micrometerPlugin); }).start(port);
 
-        app.post("notificar/{chatID}", telegramController::notificar);
+        app.post("notificar/{chatID}", ctx -> {
+            var idString = ctx.pathParam("chatID");
+            Long chatID = Long.valueOf(idString);
+            var msg = ctx.bodyAsClass(MensajeDTO.class);
+
+            System.out.println(chatID);
+            TelegramBotSender botSender = new TelegramBotSender(System.getenv("TOKEN_BOT"));
+            botSender.sendMessage(idString, msg.getMensaje());
+        });
+
         // Endpoint para obtener las métricas
         app.get("/metrics", ctx -> {
             var auth = ctx.header("Authorization");
