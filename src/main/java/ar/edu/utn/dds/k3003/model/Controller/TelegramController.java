@@ -20,7 +20,7 @@ public class TelegramController extends TelegramLongPollingBot {
 
     public void notificar(Context ctx){
         var idString = ctx.pathParam("chatID");
-        Long chatID = Long.parseLong(idString);
+        Long chatID = Long.valueOf(idString);
         var msg = ctx.bodyAsClass(MensajeDTO.class);
 
         System.out.println(chatID);
